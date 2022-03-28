@@ -1,0 +1,350 @@
+DIGEST 530bab74cf144c0f0a747b7c9641634d
+FRefinement.theories.HeterogeneousEventRelations
+R24:32 Coq.Classes.Morphisms <> <> lib
+R34:39 Coq.Setoids.Setoid <> <> lib
+R41:56 Coq.Program.Equality <> <> lib
+R85:89 ITree.ITree <> <> lib
+R91:100 ITree.ITreeFacts <> <> lib
+R102:123 ITree.Basics.HeterogeneousRelations <> <> lib
+def 139:148 <> relationEH
+R163:166 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 151:152 <> E1:1
+binder 154:155 <> E2:2
+binder 190:190 <> A:3
+binder 192:192 <> B:4
+R199:202 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R195:196 Refinement.theories.HeterogeneousEventRelations <> E1:1 var
+R198:198 Refinement.theories.HeterogeneousEventRelations <> A:3 var
+R207:210 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R203:204 Refinement.theories.HeterogeneousEventRelations <> E2:2 var
+R206:206 Refinement.theories.HeterogeneousEventRelations <> B:4 var
+ind 259:268 <> ReflexiveE
+constr 324:333 <> reflexiveE
+rec 259:268 <> ReflexiveE
+proj 324:333 <> reflexiveE
+R279:282 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 271:271 <> E:5
+R295:304 Refinement.theories.HeterogeneousEventRelations <> relationEH def
+R306:306 Refinement.theories.HeterogeneousEventRelations <> E:5 var
+R308:308 Refinement.theories.HeterogeneousEventRelations <> E:5 var
+binder 290:291 <> RE:6
+binder 344:344 <> A:8
+R351:351 Refinement.theories.HeterogeneousEventRelations <> E:5 var
+R353:353 Refinement.theories.HeterogeneousEventRelations <> A:8 var
+binder 347:347 <> e:9
+R357:358 Refinement.theories.HeterogeneousEventRelations <> RE:6 var
+R360:360 Refinement.theories.HeterogeneousEventRelations <> A:8 var
+R362:362 Refinement.theories.HeterogeneousEventRelations <> A:8 var
+R364:364 Refinement.theories.HeterogeneousEventRelations <> e:9 var
+R366:366 Refinement.theories.HeterogeneousEventRelations <> e:9 var
+ind 376:385 <> SymmetricE
+constr 441:450 <> symmetricE
+rec 376:385 <> SymmetricE
+proj 441:450 <> symmetricE
+R396:399 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 388:388 <> E:11
+R412:421 Refinement.theories.HeterogeneousEventRelations <> relationEH def
+R423:423 Refinement.theories.HeterogeneousEventRelations <> E:11 var
+R425:425 Refinement.theories.HeterogeneousEventRelations <> E:11 var
+binder 407:408 <> RE:12
+binder 461:461 <> A:14
+binder 463:463 <> B:15
+R471:471 Refinement.theories.HeterogeneousEventRelations <> E:11 var
+R473:473 Refinement.theories.HeterogeneousEventRelations <> A:14 var
+binder 466:467 <> e1:16
+R482:482 Refinement.theories.HeterogeneousEventRelations <> E:11 var
+R484:484 Refinement.theories.HeterogeneousEventRelations <> B:15 var
+binder 477:478 <> e2:17
+R500:503 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R488:489 Refinement.theories.HeterogeneousEventRelations <> RE:12 var
+R491:491 Refinement.theories.HeterogeneousEventRelations <> A:14 var
+R493:493 Refinement.theories.HeterogeneousEventRelations <> B:15 var
+R495:496 Refinement.theories.HeterogeneousEventRelations <> e1:16 var
+R498:499 Refinement.theories.HeterogeneousEventRelations <> e2:17 var
+R504:505 Refinement.theories.HeterogeneousEventRelations <> RE:12 var
+R507:507 Refinement.theories.HeterogeneousEventRelations <> B:15 var
+R509:509 Refinement.theories.HeterogeneousEventRelations <> A:14 var
+R511:512 Refinement.theories.HeterogeneousEventRelations <> e2:17 var
+R514:515 Refinement.theories.HeterogeneousEventRelations <> e1:16 var
+ind 525:535 <> TransitiveE
+constr 591:601 <> transitiveE
+rec 525:535 <> TransitiveE
+proj 591:601 <> transitiveE
+R546:549 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 538:538 <> E:19
+R562:571 Refinement.theories.HeterogeneousEventRelations <> relationEH def
+R573:573 Refinement.theories.HeterogeneousEventRelations <> E:19 var
+R575:575 Refinement.theories.HeterogeneousEventRelations <> E:19 var
+binder 557:558 <> RE:20
+binder 612:612 <> A:22
+binder 614:614 <> B:23
+binder 616:616 <> C:24
+R624:624 Refinement.theories.HeterogeneousEventRelations <> E:19 var
+R626:626 Refinement.theories.HeterogeneousEventRelations <> A:22 var
+binder 619:620 <> e1:25
+R635:635 Refinement.theories.HeterogeneousEventRelations <> E:19 var
+R637:637 Refinement.theories.HeterogeneousEventRelations <> B:23 var
+binder 630:631 <> e2:26
+R646:646 Refinement.theories.HeterogeneousEventRelations <> E:19 var
+R648:648 Refinement.theories.HeterogeneousEventRelations <> C:24 var
+binder 641:642 <> e3:27
+R668:671 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R656:657 Refinement.theories.HeterogeneousEventRelations <> RE:20 var
+R659:659 Refinement.theories.HeterogeneousEventRelations <> A:22 var
+R661:661 Refinement.theories.HeterogeneousEventRelations <> B:23 var
+R663:664 Refinement.theories.HeterogeneousEventRelations <> e1:25 var
+R666:667 Refinement.theories.HeterogeneousEventRelations <> e2:26 var
+R684:687 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R672:673 Refinement.theories.HeterogeneousEventRelations <> RE:20 var
+R675:675 Refinement.theories.HeterogeneousEventRelations <> B:23 var
+R677:677 Refinement.theories.HeterogeneousEventRelations <> C:24 var
+R679:680 Refinement.theories.HeterogeneousEventRelations <> e2:26 var
+R682:683 Refinement.theories.HeterogeneousEventRelations <> e3:27 var
+R688:689 Refinement.theories.HeterogeneousEventRelations <> RE:20 var
+R691:691 Refinement.theories.HeterogeneousEventRelations <> A:22 var
+R693:693 Refinement.theories.HeterogeneousEventRelations <> C:24 var
+R695:696 Refinement.theories.HeterogeneousEventRelations <> e1:25 var
+R698:699 Refinement.theories.HeterogeneousEventRelations <> e3:27 var
+def 714:718 <> flipE
+R733:736 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 721:722 <> E1:29
+binder 724:725 <> E2:30
+R749:758 Refinement.theories.HeterogeneousEventRelations <> relationEH def
+R760:761 Refinement.theories.HeterogeneousEventRelations <> E1:29 var
+R763:764 Refinement.theories.HeterogeneousEventRelations <> E2:30 var
+binder 744:745 <> RE:31
+R769:778 Refinement.theories.HeterogeneousEventRelations <> relationEH def
+R780:781 Refinement.theories.HeterogeneousEventRelations <> E2:30 var
+R783:784 Refinement.theories.HeterogeneousEventRelations <> E1:29 var
+binder 795:795 <> A:32
+binder 797:797 <> B:33
+binder 799:800 <> e1:34
+binder 802:803 <> e2:35
+R808:809 Refinement.theories.HeterogeneousEventRelations <> RE:31 var
+R811:811 Refinement.theories.HeterogeneousEventRelations <> B:33 var
+R813:813 Refinement.theories.HeterogeneousEventRelations <> A:32 var
+R815:816 Refinement.theories.HeterogeneousEventRelations <> e2:35 var
+R818:819 Refinement.theories.HeterogeneousEventRelations <> e1:34 var
+ind 831:839 <> rcomposeE
+constr 971:985 <> rcomposeE_intro
+R857:860 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 842:843 <> E1:36
+binder 845:846 <> E2:37
+binder 848:849 <> E3:38
+R886:895 Refinement.theories.HeterogeneousEventRelations <> relationEH def
+R897:898 Refinement.theories.HeterogeneousEventRelations <> E1:36 var
+R900:901 Refinement.theories.HeterogeneousEventRelations <> E2:37 var
+binder 879:882 <> RE12:39
+R912:921 Refinement.theories.HeterogeneousEventRelations <> relationEH def
+R923:924 Refinement.theories.HeterogeneousEventRelations <> E2:37 var
+R926:927 Refinement.theories.HeterogeneousEventRelations <> E3:38 var
+binder 905:908 <> RE23:40
+binder 939:939 <> A:41
+binder 941:941 <> C:42
+R948:951 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R947:947 Refinement.theories.HeterogeneousEventRelations <> A:41 var
+R956:959 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R955:955 Refinement.theories.HeterogeneousEventRelations <> C:42 var
+binder 988:988 <> A:45
+binder 990:990 <> B:46
+binder 992:992 <> C:47
+binder 1001:1002 <> e1:48
+binder 1004:1005 <> e2:49
+binder 1007:1008 <> e3:50
+R1026:1029 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1012:1015 Refinement.theories.HeterogeneousEventRelations <> RE12:39 var
+R1017:1017 Refinement.theories.HeterogeneousEventRelations <> A:45 var
+R1019:1019 Refinement.theories.HeterogeneousEventRelations <> B:46 var
+R1021:1022 Refinement.theories.HeterogeneousEventRelations <> e1:48 var
+R1024:1025 Refinement.theories.HeterogeneousEventRelations <> e2:49 var
+R1044:1047 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1030:1033 Refinement.theories.HeterogeneousEventRelations <> RE23:40 var
+R1035:1035 Refinement.theories.HeterogeneousEventRelations <> B:46 var
+R1037:1037 Refinement.theories.HeterogeneousEventRelations <> C:47 var
+R1039:1040 Refinement.theories.HeterogeneousEventRelations <> e2:49 var
+R1042:1043 Refinement.theories.HeterogeneousEventRelations <> e3:50 var
+R1048:1056 Refinement.theories.HeterogeneousEventRelations <> rcomposeE:43 ind
+R1075:1076 Refinement.theories.HeterogeneousEventRelations <> e3:50 var
+R1072:1073 Refinement.theories.HeterogeneousEventRelations <> e1:48 var
+R1070:1070 Refinement.theories.HeterogeneousEventRelations <> C:47 var
+R1068:1068 Refinement.theories.HeterogeneousEventRelations <> A:45 var
+R1063:1066 Refinement.theories.HeterogeneousEventRelations <> RE23:40 var
+R1058:1061 Refinement.theories.HeterogeneousEventRelations <> RE12:39 var
+ind 1111:1118 <> sum_relE
+constr 1240:1251 <> sum_relE_inl
+constr 1343:1354 <> sum_relE_inr
+binder 1121:1122 <> E1:51
+binder 1124:1125 <> E2:52
+binder 1127:1128 <> F1:53
+binder 1130:1131 <> F2:54
+R1141:1150 Refinement.theories.HeterogeneousEventRelations <> relationEH def
+R1152:1153 Refinement.theories.HeterogeneousEventRelations <> E1:51 var
+R1155:1156 Refinement.theories.HeterogeneousEventRelations <> E2:52 var
+binder 1135:1137 <> REE:55
+R1166:1175 Refinement.theories.HeterogeneousEventRelations <> relationEH def
+R1177:1178 Refinement.theories.HeterogeneousEventRelations <> F1:53 var
+R1180:1181 Refinement.theories.HeterogeneousEventRelations <> F2:54 var
+binder 1160:1162 <> REF:56
+binder 1193:1193 <> A:57
+binder 1195:1195 <> B:58
+R1210:1213 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1198:1198 ITree.Indexed.Sum <> ::type_scope:x_'+'''_x not
+R1201:1204 ITree.Indexed.Sum <> ::type_scope:x_'+'''_x not
+R1207:1209 ITree.Indexed.Sum <> ::type_scope:x_'+'''_x not
+R1209:1209 Refinement.theories.HeterogeneousEventRelations <> A:57 var
+R1226:1229 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1214:1214 ITree.Indexed.Sum <> ::type_scope:x_'+'''_x not
+R1217:1220 ITree.Indexed.Sum <> ::type_scope:x_'+'''_x not
+R1223:1225 ITree.Indexed.Sum <> ::type_scope:x_'+'''_x not
+R1225:1225 Refinement.theories.HeterogeneousEventRelations <> B:58 var
+binder 1253:1253 <> A:61
+binder 1255:1255 <> B:62
+R1263:1264 Refinement.theories.HeterogeneousEventRelations <> E1:51 var
+R1266:1266 Refinement.theories.HeterogeneousEventRelations <> A:61 var
+binder 1258:1259 <> e1:63
+R1275:1276 Refinement.theories.HeterogeneousEventRelations <> E2:52 var
+R1278:1278 Refinement.theories.HeterogeneousEventRelations <> B:62 var
+binder 1270:1271 <> e2:64
+R1296:1299 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1283:1285 Refinement.theories.HeterogeneousEventRelations <> REE:55 var
+R1287:1287 Refinement.theories.HeterogeneousEventRelations <> A:61 var
+R1289:1289 Refinement.theories.HeterogeneousEventRelations <> B:62 var
+R1291:1292 Refinement.theories.HeterogeneousEventRelations <> e1:63 var
+R1294:1295 Refinement.theories.HeterogeneousEventRelations <> e2:64 var
+R1300:1307 Refinement.theories.HeterogeneousEventRelations <> sum_relE:59 ind
+R1332:1335 ITree.Indexed.Sum <> inl1 constr
+R1337:1338 Refinement.theories.HeterogeneousEventRelations <> e2:64 var
+R1322:1325 ITree.Indexed.Sum <> inl1 constr
+R1327:1328 Refinement.theories.HeterogeneousEventRelations <> e1:63 var
+R1319:1319 Refinement.theories.HeterogeneousEventRelations <> B:62 var
+R1317:1317 Refinement.theories.HeterogeneousEventRelations <> A:61 var
+R1313:1315 Refinement.theories.HeterogeneousEventRelations <> REF:56 var
+R1309:1311 Refinement.theories.HeterogeneousEventRelations <> REE:55 var
+binder 1356:1356 <> A:65
+binder 1358:1358 <> B:66
+R1366:1367 Refinement.theories.HeterogeneousEventRelations <> F1:53 var
+R1369:1369 Refinement.theories.HeterogeneousEventRelations <> A:65 var
+binder 1361:1362 <> f1:67
+R1378:1379 Refinement.theories.HeterogeneousEventRelations <> F2:54 var
+R1381:1381 Refinement.theories.HeterogeneousEventRelations <> B:66 var
+binder 1373:1374 <> f2:68
+R1399:1402 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1386:1388 Refinement.theories.HeterogeneousEventRelations <> REF:56 var
+R1390:1390 Refinement.theories.HeterogeneousEventRelations <> A:65 var
+R1392:1392 Refinement.theories.HeterogeneousEventRelations <> B:66 var
+R1394:1395 Refinement.theories.HeterogeneousEventRelations <> f1:67 var
+R1397:1398 Refinement.theories.HeterogeneousEventRelations <> f2:68 var
+R1403:1410 Refinement.theories.HeterogeneousEventRelations <> sum_relE:59 ind
+R1435:1438 ITree.Indexed.Sum <> inr1 constr
+R1440:1441 Refinement.theories.HeterogeneousEventRelations <> f2:68 var
+R1425:1428 ITree.Indexed.Sum <> inr1 constr
+R1430:1431 Refinement.theories.HeterogeneousEventRelations <> f1:67 var
+R1422:1422 Refinement.theories.HeterogeneousEventRelations <> B:66 var
+R1420:1420 Refinement.theories.HeterogeneousEventRelations <> A:65 var
+R1416:1418 Refinement.theories.HeterogeneousEventRelations <> REF:56 var
+R1412:1414 Refinement.theories.HeterogeneousEventRelations <> REE:55 var
+def 1457:1469 <> relationEAnsH
+R1484:1487 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 1472:1473 <> E1:69
+binder 1475:1476 <> E2:70
+binder 1511:1511 <> A:71
+binder 1513:1513 <> B:72
+R1520:1523 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1516:1517 Refinement.theories.HeterogeneousEventRelations <> E1:69 var
+R1519:1519 Refinement.theories.HeterogeneousEventRelations <> A:71 var
+R1525:1528 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1524:1524 Refinement.theories.HeterogeneousEventRelations <> A:71 var
+R1533:1536 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1529:1530 Refinement.theories.HeterogeneousEventRelations <> E2:70 var
+R1532:1532 Refinement.theories.HeterogeneousEventRelations <> B:72 var
+R1538:1541 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1537:1537 Refinement.theories.HeterogeneousEventRelations <> B:72 var
+ind 1558:1567 <> sum_relAns
+constr 1708:1722 <> sum_relEAns_inl
+constr 1828:1842 <> sum_relEAns_inr
+binder 1570:1571 <> E1:73
+binder 1573:1574 <> E2:74
+binder 1576:1577 <> F1:75
+binder 1579:1580 <> F2:76
+R1590:1602 Refinement.theories.HeterogeneousEventRelations <> relationEAnsH def
+R1604:1605 Refinement.theories.HeterogeneousEventRelations <> E1:73 var
+R1607:1608 Refinement.theories.HeterogeneousEventRelations <> E2:74 var
+binder 1584:1586 <> REE:77
+R1618:1630 Refinement.theories.HeterogeneousEventRelations <> relationEAnsH def
+R1632:1633 Refinement.theories.HeterogeneousEventRelations <> F1:75 var
+R1635:1636 Refinement.theories.HeterogeneousEventRelations <> F2:76 var
+binder 1612:1614 <> REF:78
+binder 1651:1651 <> A:79
+binder 1653:1653 <> B:80
+R1668:1671 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1656:1656 ITree.Indexed.Sum <> ::type_scope:x_'+'''_x not
+R1659:1662 ITree.Indexed.Sum <> ::type_scope:x_'+'''_x not
+R1665:1667 ITree.Indexed.Sum <> ::type_scope:x_'+'''_x not
+R1667:1667 Refinement.theories.HeterogeneousEventRelations <> A:79 var
+R1673:1676 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1672:1672 Refinement.theories.HeterogeneousEventRelations <> A:79 var
+R1689:1692 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1677:1677 ITree.Indexed.Sum <> ::type_scope:x_'+'''_x not
+R1680:1683 ITree.Indexed.Sum <> ::type_scope:x_'+'''_x not
+R1686:1688 ITree.Indexed.Sum <> ::type_scope:x_'+'''_x not
+R1688:1688 Refinement.theories.HeterogeneousEventRelations <> B:80 var
+R1694:1697 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1693:1693 Refinement.theories.HeterogeneousEventRelations <> B:80 var
+binder 1724:1724 <> A:83
+binder 1726:1726 <> B:84
+R1734:1735 Refinement.theories.HeterogeneousEventRelations <> E1:73 var
+R1737:1737 Refinement.theories.HeterogeneousEventRelations <> A:83 var
+binder 1729:1730 <> e1:85
+R1746:1747 Refinement.theories.HeterogeneousEventRelations <> E2:74 var
+R1749:1749 Refinement.theories.HeterogeneousEventRelations <> B:84 var
+binder 1741:1742 <> e2:86
+binder 1752:1752 <> a:87
+binder 1754:1754 <> b:88
+R1775:1778 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1758:1760 Refinement.theories.HeterogeneousEventRelations <> REE:77 var
+R1762:1762 Refinement.theories.HeterogeneousEventRelations <> A:83 var
+R1764:1764 Refinement.theories.HeterogeneousEventRelations <> B:84 var
+R1766:1767 Refinement.theories.HeterogeneousEventRelations <> e1:85 var
+R1769:1769 Refinement.theories.HeterogeneousEventRelations <> a:87 var
+R1771:1772 Refinement.theories.HeterogeneousEventRelations <> e2:86 var
+R1774:1774 Refinement.theories.HeterogeneousEventRelations <> b:88 var
+R1779:1788 Refinement.theories.HeterogeneousEventRelations <> sum_relAns:81 ind
+R1824:1824 Refinement.theories.HeterogeneousEventRelations <> b:88 var
+R1815:1818 ITree.Indexed.Sum <> inl1 constr
+R1820:1821 Refinement.theories.HeterogeneousEventRelations <> e2:86 var
+R1812:1812 Refinement.theories.HeterogeneousEventRelations <> a:87 var
+R1803:1806 ITree.Indexed.Sum <> inl1 constr
+R1808:1809 Refinement.theories.HeterogeneousEventRelations <> e1:85 var
+R1800:1800 Refinement.theories.HeterogeneousEventRelations <> B:84 var
+R1798:1798 Refinement.theories.HeterogeneousEventRelations <> A:83 var
+R1794:1796 Refinement.theories.HeterogeneousEventRelations <> REF:78 var
+R1790:1792 Refinement.theories.HeterogeneousEventRelations <> REE:77 var
+binder 1844:1844 <> A:89
+binder 1846:1846 <> B:90
+R1854:1855 Refinement.theories.HeterogeneousEventRelations <> F1:75 var
+R1857:1857 Refinement.theories.HeterogeneousEventRelations <> A:89 var
+binder 1849:1850 <> f1:91
+R1866:1867 Refinement.theories.HeterogeneousEventRelations <> F2:76 var
+R1869:1869 Refinement.theories.HeterogeneousEventRelations <> B:90 var
+binder 1861:1862 <> f2:92
+binder 1872:1872 <> a:93
+binder 1874:1874 <> b:94
+R1895:1898 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1878:1880 Refinement.theories.HeterogeneousEventRelations <> REF:78 var
+R1882:1882 Refinement.theories.HeterogeneousEventRelations <> A:89 var
+R1884:1884 Refinement.theories.HeterogeneousEventRelations <> B:90 var
+R1886:1887 Refinement.theories.HeterogeneousEventRelations <> f1:91 var
+R1889:1889 Refinement.theories.HeterogeneousEventRelations <> a:93 var
+R1891:1892 Refinement.theories.HeterogeneousEventRelations <> f2:92 var
+R1894:1894 Refinement.theories.HeterogeneousEventRelations <> b:94 var
+R1899:1908 Refinement.theories.HeterogeneousEventRelations <> sum_relAns:81 ind
+R1944:1944 Refinement.theories.HeterogeneousEventRelations <> b:94 var
+R1935:1938 ITree.Indexed.Sum <> inr1 constr
+R1940:1941 Refinement.theories.HeterogeneousEventRelations <> f2:92 var
+R1932:1932 Refinement.theories.HeterogeneousEventRelations <> a:93 var
+R1923:1926 ITree.Indexed.Sum <> inr1 constr
+R1928:1929 Refinement.theories.HeterogeneousEventRelations <> f1:91 var
+R1920:1920 Refinement.theories.HeterogeneousEventRelations <> B:90 var
+R1918:1918 Refinement.theories.HeterogeneousEventRelations <> A:89 var
+R1914:1916 Refinement.theories.HeterogeneousEventRelations <> REF:78 var
+R1910:1912 Refinement.theories.HeterogeneousEventRelations <> REE:77 var
