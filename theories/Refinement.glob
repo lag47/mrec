@@ -1,0 +1,863 @@
+DIGEST 8206eec9c7fe759f2e6f0ecba5d6a4a0
+FRefinement.theories.Refinement
+R103:111 Coq.Classes.Morphisms <> <> lib
+R113:118 Coq.Setoids.Setoid <> <> lib
+R120:135 Coq.Program.Equality <> <> lib
+R164:168 ITree.ITree <> <> lib
+R170:179 ITree.ITreeFacts <> <> lib
+R207:210 Paco.paco <> <> lib
+R237:241 Coq.Logic.Eqdep <> <> lib
+R243:252 Coq.Logic.EqdepFacts <> <> lib
+R271:297 Refinement.theories.HeterogeneousEventRelations <> <> lib
+R316:325 ITree.Core.ITreeDefinition ITree bind def
+not 307:307 <> :::x_'>>='_x
+R388:392 Refinement.theories.Refinement <> :::x_'>>='_x not
+not 371:371 <> :::x_'>>'_x
+ind 475:483 <> SpecEvent
+constr 523:530 <> Spec_vis
+constr 557:567 <> Spec_forall
+constr 587:597 <> Spec_exists
+R492:495 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 486:486 <> E:1
+binder 503:503 <> A:2
+R537:540 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R534:534 Refinement.theories.Refinement <> E:1 var
+R536:536 Refinement.theories.Refinement <> A:2 var
+R541:549 Refinement.theories.Refinement <> SpecEvent:3 ind
+R553:553 Refinement.theories.Refinement <> A:2 var
+R551:551 Refinement.theories.Refinement <> E:1 var
+R571:579 Refinement.theories.Refinement <> SpecEvent:3 ind
+R583:583 Refinement.theories.Refinement <> A:2 var
+R581:581 Refinement.theories.Refinement <> E:1 var
+R601:609 Refinement.theories.Refinement <> SpecEvent:3 ind
+R613:613 Refinement.theories.Refinement <> A:2 var
+R611:611 Refinement.theories.Refinement <> E:1 var
+R628:635 Refinement.theories.Refinement <> Spec_vis constr
+R628:635 Refinement.theories.Refinement <> Spec_vis constr
+R654:664 Refinement.theories.Refinement <> Spec_forall constr
+R654:664 Refinement.theories.Refinement <> Spec_forall constr
+R683:693 Refinement.theories.Refinement <> Spec_exists constr
+R683:693 Refinement.theories.Refinement <> Spec_exists constr
+syndef 756:765 <> itree_spec
+R773:777 ITree.Core.ITreeDefinition <> itree corec
+R780:788 Refinement.theories.Refinement <> SpecEvent variant
+syndef 868:878 <> itree_spec'
+R888:893 ITree.Core.ITreeDefinition <> itree' syndef
+R896:904 Refinement.theories.Refinement <> SpecEvent variant
+R896:904 Refinement.theories.Refinement <> SpecEvent variant
+ind 1089:1098 <> satisfiesF
+constr 1229:1241 <> satisfies_Ret
+constr 1303:1317 <> satisfies_TauLR
+constr 1416:1429 <> satisfies_TauL
+constr 1522:1535 <> satisfies_TauR
+constr 1628:1642 <> satisfies_VisLR
+constr 1777:1793 <> satisfies_forallR
+constr 1926:1942 <> satisfies_existsR
+binder 1101:1101 <> E:5
+binder 1103:1104 <> R1:6
+binder 1106:1107 <> R2:7
+R1118:1121 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1116:1117 Refinement.theories.Refinement <> R1:6 var
+R1124:1127 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1122:1123 Refinement.theories.Refinement <> R2:7 var
+binder 1111:1112 <> RR:8
+R1149:1152 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1139:1143 ITree.Core.ITreeDefinition <> itree corec
+R1147:1148 Refinement.theories.Refinement <> R1:6 var
+R1145:1145 Refinement.theories.Refinement <> E:5 var
+R1168:1171 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1153:1162 Refinement.theories.Refinement <> itree_spec syndef
+R1164:1164 Refinement.theories.Refinement <> E:5 var
+R1166:1167 Refinement.theories.Refinement <> R2:7 var
+binder 1135:1135 <> F:9
+R1193:1196 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1182:1187 ITree.Core.ITreeDefinition <> itree' syndef
+R1213:1216 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1197:1207 Refinement.theories.Refinement <> itree_spec' syndef
+binder 1243:1244 <> r1:12
+binder 1246:1247 <> r2:13
+R1259:1262 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1251:1252 Refinement.theories.Refinement <> RR:8 var
+R1257:1258 Refinement.theories.Refinement <> r2:13 var
+R1254:1255 Refinement.theories.Refinement <> r1:12 var
+R1263:1272 Refinement.theories.Refinement <> satisfiesF:10 ind
+R1290:1293 ITree.Core.ITreeDefinition <> RetF constr
+R1295:1296 Refinement.theories.Refinement <> r2:13 var
+R1280:1283 ITree.Core.ITreeDefinition <> RetF constr
+R1285:1286 Refinement.theories.Refinement <> r1:12 var
+R1277:1277 Refinement.theories.Refinement <> F:9 var
+R1274:1275 Refinement.theories.Refinement <> RR:8 var
+binder 1319:1322 <> phi1:14
+R1332:1341 Refinement.theories.Refinement <> itree_spec syndef
+R1343:1343 Refinement.theories.Refinement <> E:5 var
+R1345:1346 Refinement.theories.Refinement <> R2:7 var
+binder 1325:1328 <> phi2:15
+R1368:1371 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1357:1357 Refinement.theories.Refinement <> F:9 var
+R1364:1367 Refinement.theories.Refinement <> phi2:15 var
+R1359:1362 Refinement.theories.Refinement <> phi1:14 var
+R1372:1381 Refinement.theories.Refinement <> satisfiesF:10 ind
+R1401:1404 ITree.Core.ITreeDefinition <> TauF constr
+R1406:1409 Refinement.theories.Refinement <> phi2:15 var
+R1389:1392 ITree.Core.ITreeDefinition <> TauF constr
+R1394:1397 Refinement.theories.Refinement <> phi1:14 var
+R1386:1386 Refinement.theories.Refinement <> F:9 var
+R1383:1384 Refinement.theories.Refinement <> RR:8 var
+binder 1431:1433 <> phi:16
+binder 1435:1438 <> ophi:17
+R1482:1485 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1448:1457 Refinement.theories.Refinement <> satisfiesF:10 ind
+R1478:1481 Refinement.theories.Refinement <> ophi:17 var
+R1465:1471 ITree.Core.ITreeDefinition <> observe def
+R1473:1475 Refinement.theories.Refinement <> phi:16 var
+R1462:1462 Refinement.theories.Refinement <> F:9 var
+R1459:1460 Refinement.theories.Refinement <> RR:8 var
+R1486:1495 Refinement.theories.Refinement <> satisfiesF:10 ind
+R1513:1516 Refinement.theories.Refinement <> ophi:17 var
+R1503:1506 ITree.Core.ITreeDefinition <> TauF constr
+R1508:1510 Refinement.theories.Refinement <> phi:16 var
+R1500:1500 Refinement.theories.Refinement <> F:9 var
+R1497:1498 Refinement.theories.Refinement <> RR:8 var
+binder 1537:1540 <> ophi:18
+binder 1542:1544 <> phi:19
+R1588:1591 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1554:1563 Refinement.theories.Refinement <> satisfiesF:10 ind
+R1576:1582 ITree.Core.ITreeDefinition <> observe def
+R1584:1586 Refinement.theories.Refinement <> phi:19 var
+R1570:1573 Refinement.theories.Refinement <> ophi:18 var
+R1568:1568 Refinement.theories.Refinement <> F:9 var
+R1565:1566 Refinement.theories.Refinement <> RR:8 var
+R1592:1601 Refinement.theories.Refinement <> satisfiesF:10 ind
+R1614:1617 ITree.Core.ITreeDefinition <> TauF constr
+R1619:1621 Refinement.theories.Refinement <> phi:19 var
+R1608:1611 Refinement.theories.Refinement <> ophi:18 var
+R1606:1606 Refinement.theories.Refinement <> F:9 var
+R1603:1604 Refinement.theories.Refinement <> RR:8 var
+binder 1644:1644 <> A:20
+binder 1646:1646 <> e:21
+binder 1648:1652 <> kphi1:22
+binder 1654:1658 <> kphi2:23
+R1668:1668 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1704:1715 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1680:1680 Refinement.theories.Refinement <> A:20 var
+binder 1676:1676 <> a:24
+R1683:1683 Refinement.theories.Refinement <> F:9 var
+R1696:1700 Refinement.theories.Refinement <> kphi2:23 var
+R1702:1702 Refinement.theories.Refinement <> a:24 var
+R1686:1690 Refinement.theories.Refinement <> kphi1:22 var
+R1692:1692 Refinement.theories.Refinement <> a:24 var
+R1716:1725 Refinement.theories.Refinement <> satisfiesF:10 ind
+R1748:1751 ITree.Core.ITreeDefinition <> VisF constr
+R1766:1770 Refinement.theories.Refinement <> kphi2:23 var
+R1754:1761 Refinement.theories.Refinement <> Spec_vis constr
+R1763:1763 Refinement.theories.Refinement <> e:21 var
+R1733:1736 ITree.Core.ITreeDefinition <> VisF constr
+R1740:1744 Refinement.theories.Refinement <> kphi1:22 var
+R1738:1738 Refinement.theories.Refinement <> e:21 var
+R1730:1730 Refinement.theories.Refinement <> F:9 var
+R1727:1728 Refinement.theories.Refinement <> RR:8 var
+binder 1795:1795 <> A:25
+binder 1797:1800 <> kphi:26
+binder 1802:1804 <> phi:27
+R1814:1814 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1867:1877 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1826:1826 Refinement.theories.Refinement <> A:25 var
+binder 1822:1822 <> a:28
+R1829:1838 Refinement.theories.Refinement <> satisfiesF:10 ind
+R1850:1856 ITree.Core.ITreeDefinition <> observe def
+R1859:1862 Refinement.theories.Refinement <> kphi:26 var
+R1864:1864 Refinement.theories.Refinement <> a:28 var
+R1845:1847 Refinement.theories.Refinement <> phi:27 var
+R1843:1843 Refinement.theories.Refinement <> F:9 var
+R1840:1841 Refinement.theories.Refinement <> RR:8 var
+R1878:1887 Refinement.theories.Refinement <> satisfiesF:10 ind
+R1899:1902 ITree.Core.ITreeDefinition <> VisF constr
+R1916:1919 Refinement.theories.Refinement <> kphi:26 var
+R1904:1914 Refinement.theories.Refinement <> Spec_forall constr
+R1894:1896 Refinement.theories.Refinement <> phi:27 var
+R1892:1892 Refinement.theories.Refinement <> F:9 var
+R1889:1890 Refinement.theories.Refinement <> RR:8 var
+binder 1944:1944 <> A:29
+binder 1946:1949 <> kphi:30
+binder 1951:1953 <> phi:31
+R1960:1960 Refinement.theories.Refinement <> A:29 var
+binder 1956:1956 <> a:32
+R1971:1971 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2010:2020 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1972:1981 Refinement.theories.Refinement <> satisfiesF:10 ind
+R1993:1999 ITree.Core.ITreeDefinition <> observe def
+R2002:2005 Refinement.theories.Refinement <> kphi:30 var
+R2007:2007 Refinement.theories.Refinement <> a:32 var
+R1988:1990 Refinement.theories.Refinement <> phi:31 var
+R1986:1986 Refinement.theories.Refinement <> F:9 var
+R1983:1984 Refinement.theories.Refinement <> RR:8 var
+R2021:2030 Refinement.theories.Refinement <> satisfiesF:10 ind
+R2042:2045 ITree.Core.ITreeDefinition <> VisF constr
+R2059:2062 Refinement.theories.Refinement <> kphi:30 var
+R2047:2057 Refinement.theories.Refinement <> Spec_exists constr
+R2037:2039 Refinement.theories.Refinement <> phi:31 var
+R2035:2035 Refinement.theories.Refinement <> F:9 var
+R2032:2033 Refinement.theories.Refinement <> RR:8 var
+R2085:2094 Refinement.theories.Refinement <> satisfiesF ind
+def 2108:2117 <> satisfies_
+binder 2120:2120 <> E:33
+binder 2122:2123 <> R1:34
+binder 2125:2126 <> R2:35
+R2137:2140 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2135:2136 Refinement.theories.Refinement <> R1:34 var
+R2143:2146 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2141:2142 Refinement.theories.Refinement <> R2:35 var
+binder 2130:2131 <> RR:36
+binder 2153:2153 <> F:37
+binder 2155:2156 <> t1:38
+binder 2158:2159 <> t2:39
+R2174:2183 Refinement.theories.Refinement <> satisfiesF ind
+R2185:2185 Refinement.theories.Refinement <> E:33 var
+R2187:2188 Refinement.theories.Refinement <> R1:34 var
+R2190:2191 Refinement.theories.Refinement <> R2:35 var
+R2193:2194 Refinement.theories.Refinement <> RR:36 var
+R2196:2196 Refinement.theories.Refinement <> F:37 var
+R2199:2205 ITree.Core.ITreeDefinition <> observe def
+R2207:2208 Refinement.theories.Refinement <> t1:38 var
+R2212:2218 ITree.Core.ITreeDefinition <> observe def
+R2220:2221 Refinement.theories.Refinement <> t2:39 var
+prf 2232:2250 <> monotone_satisfiesF
+binder 2253:2253 <> E:40
+binder 2255:2256 <> R1:41
+binder 2258:2259 <> R2:42
+R2270:2273 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2268:2269 Refinement.theories.Refinement <> R1:41 var
+R2276:2279 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2274:2275 Refinement.theories.Refinement <> R2:42 var
+binder 2263:2264 <> RR:43
+binder 2286:2288 <> ot1:44
+R2297:2307 Refinement.theories.Refinement <> itree_spec' syndef
+R2309:2309 Refinement.theories.Refinement <> E:40 var
+R2311:2312 Refinement.theories.Refinement <> R2:42 var
+R2309:2309 Refinement.theories.Refinement <> E:40 var
+R2311:2312 Refinement.theories.Refinement <> R2:42 var
+binder 2291:2293 <> ot2:45
+binder 2315:2317 <> sim:46
+binder 2319:2322 <> sim':47
+R2336:2340 Paco.paconotation <> :::x_'<2='_x not
+R2333:2335 Refinement.theories.Refinement <> sim:46 var
+R2341:2344 Refinement.theories.Refinement <> sim':47 var
+binder 2328:2329 <> LE:48
+R2356:2365 Refinement.theories.Refinement <> satisfiesF ind
+R2378:2380 Refinement.theories.Refinement <> ot2:45 var
+R2374:2376 Refinement.theories.Refinement <> ot1:44 var
+R2370:2372 Refinement.theories.Refinement <> sim:46 var
+R2367:2368 Refinement.theories.Refinement <> RR:43 var
+binder 2351:2352 <> IN:49
+R2388:2397 Refinement.theories.Refinement <> satisfiesF ind
+R2411:2413 Refinement.theories.Refinement <> ot2:45 var
+R2407:2409 Refinement.theories.Refinement <> ot1:44 var
+R2402:2405 Refinement.theories.Refinement <> sim':47 var
+R2399:2400 Refinement.theories.Refinement <> RR:43 var
+prf 2458:2476 <> monotone_satisfies_
+binder 2479:2479 <> E:50
+binder 2481:2482 <> R1:51
+binder 2484:2485 <> R2:52
+binder 2488:2489 <> RR:53
+R2493:2501 Paco.paco2 <> monotone2 def
+R2505:2514 Refinement.theories.Refinement <> satisfies_ def
+R2516:2516 Refinement.theories.Refinement <> E:50 var
+R2518:2519 Refinement.theories.Refinement <> R1:51 var
+R2521:2522 Refinement.theories.Refinement <> R2:52 var
+R2524:2525 Refinement.theories.Refinement <> RR:53 var
+R2556:2574 Refinement.theories.Refinement <> monotone_satisfiesF thm
+R2556:2574 Refinement.theories.Refinement <> monotone_satisfiesF thm
+def 3022:3030 <> satisfies
+binder 3033:3033 <> E:54
+binder 3035:3036 <> R1:55
+binder 3038:3039 <> R2:56
+binder 3042:3043 <> RR:57
+R3057:3060 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3047:3051 ITree.Core.ITreeDefinition <> itree corec
+R3055:3056 Refinement.theories.Refinement <> R1:55 var
+R3053:3053 Refinement.theories.Refinement <> E:54 var
+R3076:3079 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3061:3070 Refinement.theories.Refinement <> itree_spec syndef
+R3072:3072 Refinement.theories.Refinement <> E:54 var
+R3074:3075 Refinement.theories.Refinement <> R2:56 var
+R3090:3094 Paco.paco2 <> paco2 def
+R3112:3115 Paco.paconotation <> bot2 def
+R3097:3106 Refinement.theories.Refinement <> satisfies_ def
+R3108:3109 Refinement.theories.Refinement <> RR:57 var
+R3179:3181 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3167:3172 Coq.Init.Specif <> existT constr
+R3179:3181 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3167:3172 Coq.Init.Specif <> existT constr
+R3198:3206 Coq.Logic.Eqdep EqdepTheory inj_pair2 thm
+sec 3227:3240 <> satisfies_test
+def 3257:3261 <> cphi1
+binder 3264:3264 <> E:58
+binder 3268:3268 <> A:59
+binder 3270:3270 <> R:60
+R3282:3291 Refinement.theories.Refinement <> itree_spec syndef
+R3293:3293 Refinement.theories.Refinement <> E:58 var
+R3295:3295 Refinement.theories.Refinement <> R:60 var
+R3300:3302 ITree.Core.ITreeDefinition <> Vis syndef
+R3305:3315 Refinement.theories.Refinement <> Spec_forall constr
+R3327:3327 Refinement.theories.Refinement <> A:59 var
+R3332:3336 Refinement.theories.Refinement <> cphi1:61 def
+R3340:3340 Refinement.theories.Refinement <> R:60 var
+R3338:3338 Refinement.theories.Refinement <> A:59 var
+def 3358:3362 <> cphi2
+binder 3365:3365 <> E:62
+binder 3369:3369 <> A:63
+binder 3371:3371 <> R:64
+R3383:3392 Refinement.theories.Refinement <> itree_spec syndef
+R3394:3394 Refinement.theories.Refinement <> E:62 var
+R3396:3396 Refinement.theories.Refinement <> R:64 var
+R3401:3403 ITree.Core.ITreeDefinition <> Tau syndef
+R3406:3408 ITree.Core.ITreeDefinition <> Vis syndef
+R3410:3420 Refinement.theories.Refinement <> Spec_forall constr
+R3430:3430 Refinement.theories.Refinement <> A:63 var
+R3435:3439 Refinement.theories.Refinement <> cphi2:65 def
+R3443:3443 Refinement.theories.Refinement <> R:64 var
+R3441:3441 Refinement.theories.Refinement <> A:63 var
+prf 3458:3467 <> phi1_empty
+binder 3478:3478 <> E:66
+binder 3480:3481 <> R1:67
+binder 3483:3484 <> R2:68
+R3494:3497 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3492:3493 Refinement.theories.Refinement <> R1:67 var
+R3500:3503 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3498:3499 Refinement.theories.Refinement <> R2:68 var
+binder 3487:3488 <> RR:69
+R3515:3519 ITree.Core.ITreeDefinition <> itree corec
+R3523:3524 Refinement.theories.Refinement <> R1:67 var
+R3521:3521 Refinement.theories.Refinement <> E:66 var
+binder 3511:3511 <> t:70
+R3528:3529 Coq.Init.Logic <> ::type_scope:'~'_x not
+R3530:3538 Refinement.theories.Refinement <> satisfies def
+R3546:3550 Refinement.theories.Refinement <> cphi1 def
+R3556:3557 Refinement.theories.Refinement <> R2:68 var
+R3552:3554 Coq.Init.Datatypes <> nat ind
+R3543:3543 Refinement.theories.Refinement <> t:70 var
+R3540:3541 Refinement.theories.Refinement <> RR:69 var
+R3644:3650 ITree.Core.ITreeDefinition <> observe def
+R3644:3650 ITree.Core.ITreeDefinition <> observe def
+R3692:3695 ITree.Core.ITreeDefinition <> VisF constr
+R3718:3720 Coq.Init.Datatypes <> nat ind
+R3725:3729 Refinement.theories.Refinement <> cphi1 def
+R3731:3733 Coq.Init.Datatypes <> nat ind
+R3697:3707 Refinement.theories.Refinement <> Spec_forall constr
+R3692:3695 ITree.Core.ITreeDefinition <> VisF constr
+R3718:3720 Coq.Init.Datatypes <> nat ind
+R3725:3729 Refinement.theories.Refinement <> cphi1 def
+R3731:3733 Coq.Init.Datatypes <> nat ind
+R3697:3707 Refinement.theories.Refinement <> Spec_forall constr
+prf 3892:3902 <> phi2_nempty
+binder 3913:3913 <> E:71
+binder 3915:3915 <> A:72
+binder 3917:3918 <> R1:73
+binder 3920:3921 <> R2:74
+R3931:3934 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3929:3930 Refinement.theories.Refinement <> R1:73 var
+R3937:3940 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3935:3936 Refinement.theories.Refinement <> R2:74 var
+binder 3924:3925 <> RR:75
+R3948:3956 Refinement.theories.Refinement <> satisfies def
+R3981:3985 Refinement.theories.Refinement <> cphi2 def
+R3989:3990 Refinement.theories.Refinement <> R2:74 var
+R3987:3987 Refinement.theories.Refinement <> A:72 var
+R3963:3972 ITree.Core.ITreeDefinition ITree spin def
+R3974:3974 Refinement.theories.Refinement <> E:71 var
+R3976:3977 Refinement.theories.Refinement <> R1:73 var
+R3958:3959 Refinement.theories.Refinement <> RR:75 var
+prf 4162:4175 <> phi1_phi2_eutt
+binder 4186:4186 <> E:76
+binder 4188:4188 <> R:77
+R4191:4191 ITree.Eq.Eqit <> ::type_scope:x_'≈'_x not
+R4206:4212 ITree.Eq.Eqit <> ::type_scope:x_'≈'_x not
+R4224:4224 ITree.Eq.Eqit <> ::type_scope:x_'≈'_x not
+R4193:4197 Refinement.theories.Refinement <> cphi1 def
+R4199:4199 Refinement.theories.Refinement <> E:76 var
+R4201:4203 Coq.Init.Datatypes <> nat ind
+R4205:4205 Refinement.theories.Refinement <> R:77 var
+R4213:4217 Refinement.theories.Refinement <> cphi2 def
+R4223:4223 Refinement.theories.Refinement <> R:77 var
+R4219:4221 Coq.Init.Datatypes <> nat ind
+R4606:4619 Refinement.theories.Refinement satisfies_test <> sec
+prf 4629:4658 <> not_Proper_eutt_satisfies_impl
+binder 4661:4661 <> E:78
+binder 4663:4664 <> R1:79
+binder 4666:4667 <> R2:80
+binder 4670:4671 <> RR:81
+R4677:4678 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4679:4684 Coq.Classes.Morphisms <> Proper class
+R4719:4727 Refinement.theories.Refinement <> satisfies def
+R4729:4729 Refinement.theories.Refinement <> E:78 var
+R4731:4732 Refinement.theories.Refinement <> R1:79 var
+R4734:4735 Refinement.theories.Refinement <> R2:80 var
+R4737:4738 Refinement.theories.Refinement <> RR:81 var
+R4694:4698 Coq.Classes.Morphisms ProperNotations ::signature_scope:x_'==>'_x not
+R4687:4690 ITree.Eq.Eqit <> eutt def
+R4692:4693 Coq.Init.Logic <> eq ind
+R4706:4710 Coq.Classes.Morphisms ProperNotations ::signature_scope:x_'==>'_x not
+R4699:4702 ITree.Eq.Eqit <> eutt def
+R4704:4705 Coq.Init.Logic <> eq ind
+R4711:4714 Coq.Program.Basics <> impl def
+R4770:4779 Refinement.theories.Refinement <> phi1_empty thm
+R4770:4779 Refinement.theories.Refinement <> phi1_empty thm
+R4790:4803 Refinement.theories.Refinement <> phi1_phi2_eutt thm
+R4790:4803 Refinement.theories.Refinement <> phi1_phi2_eutt thm
+R4790:4803 Refinement.theories.Refinement <> phi1_phi2_eutt thm
+R4815:4825 Refinement.theories.Refinement <> phi2_nempty thm
+R4815:4825 Refinement.theories.Refinement <> phi2_nempty thm
+prf 4840:4857 <> satisfies_TauL_inv
+R4878:4881 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 4870:4870 <> E:82
+binder 4889:4890 <> R2:83
+binder 4892:4893 <> R1:84
+R4911:4914 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4909:4910 Refinement.theories.Refinement <> R1:84 var
+R4917:4920 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4915:4916 Refinement.theories.Refinement <> R2:83 var
+binder 4904:4905 <> RR:85
+R4933:4937 ITree.Core.ITreeDefinition <> itree corec
+R4941:4942 Refinement.theories.Refinement <> R1:84 var
+R4939:4939 Refinement.theories.Refinement <> E:82 var
+binder 4928:4929 <> m1:86
+R4957:4966 Refinement.theories.Refinement <> itree_spec syndef
+R4968:4968 Refinement.theories.Refinement <> E:82 var
+R4970:4971 Refinement.theories.Refinement <> R2:83 var
+binder 4950:4953 <> phi2:87
+R5047:5050 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4979:4988 Refinement.theories.Refinement <> satisfiesF ind
+R5034:5040 ITree.Core.ITreeDefinition <> observe def
+R5042:5045 Refinement.theories.Refinement <> phi2:87 var
+R5024:5027 ITree.Core.ITreeDefinition <> TauF constr
+R5029:5030 Refinement.theories.Refinement <> m1:86 var
+R4994:4999 Paco.paco2 <> upaco2 def
+R5017:5020 Paco.paconotation <> bot2 def
+R5002:5011 Refinement.theories.Refinement <> satisfies_ def
+R5013:5014 Refinement.theories.Refinement <> RR:85 var
+R4990:4991 Refinement.theories.Refinement <> RR:85 var
+R5051:5059 Refinement.theories.Refinement <> satisfies def
+R5067:5070 Refinement.theories.Refinement <> phi2:87 var
+R5064:5065 Refinement.theories.Refinement <> m1:86 var
+R5061:5062 Refinement.theories.Refinement <> RR:85 var
+R5123:5126 ITree.Core.ITreeDefinition <> TauF constr
+R5123:5126 ITree.Core.ITreeDefinition <> TauF constr
+inst 5257:5284 <> Proper_eutt_satisfies_impl_l
+binder 5287:5287 <> E:88
+binder 5289:5290 <> R1:89
+binder 5292:5293 <> R2:90
+binder 5296:5297 <> RR:91
+R5303:5308 Coq.Classes.Morphisms <> Proper class
+R5338:5346 Refinement.theories.Refinement <> satisfies def
+R5348:5348 Refinement.theories.Refinement <> E:88 var
+R5350:5351 Refinement.theories.Refinement <> R1:89 var
+R5353:5354 Refinement.theories.Refinement <> R2:90 var
+R5356:5357 Refinement.theories.Refinement <> RR:91 var
+R5318:5322 Coq.Classes.Morphisms ProperNotations ::signature_scope:x_'==>'_x not
+R5311:5314 ITree.Eq.Eqit <> eutt def
+R5316:5317 Coq.Init.Logic <> eq ind
+R5325:5329 Coq.Classes.Morphisms ProperNotations ::signature_scope:x_'==>'_x not
+R5323:5324 Coq.Init.Logic <> eq ind
+R5330:5333 Coq.Program.Basics <> impl def
+R5654:5657 ITree.Core.ITreeDefinition <> RetF constr
+R5654:5657 ITree.Core.ITreeDefinition <> RetF constr
+R5747:5751 ITree.Eq.Eqit <> ::type_scope:x_'≈'_x not
+R5747:5751 ITree.Eq.Eqit <> ::type_scope:x_'≈'_x not
+R5769:5776 ITree.Eq.Eqit <> tau_eutt thm
+R5769:5776 ITree.Eq.Eqit <> tau_eutt thm
+R5769:5776 ITree.Eq.Eqit <> tau_eutt thm
+R5966:5975 ITree.Eq.Eqit <> itree_eta' thm
+R5966:5975 ITree.Eq.Eqit <> itree_eta' thm
+R5966:5975 ITree.Eq.Eqit <> itree_eta' thm
+R6032:6035 Paco.paconotation <> bot2 def
+R6011:6019 Paco.paco2 <> paco2_mon thm
+R6032:6035 Paco.paconotation <> bot2 def
+R6011:6019 Paco.paco2 <> paco2_mon thm
+R6153:6170 Refinement.theories.Refinement <> satisfies_TauL_inv thm
+R6153:6170 Refinement.theories.Refinement <> satisfies_TauL_inv thm
+R6219:6222 ITree.Core.ITreeDefinition <> VisF constr
+R6219:6222 ITree.Core.ITreeDefinition <> VisF constr
+R6429:6446 Refinement.theories.Refinement <> satisfies_TauL_inv thm
+R6429:6446 Refinement.theories.Refinement <> satisfies_TauL_inv thm
+R6509:6516 ITree.Eq.Eqit <> tau_eutt thm
+R6509:6516 ITree.Eq.Eqit <> tau_eutt thm
+R6509:6516 ITree.Eq.Eqit <> tau_eutt thm
+R6562:6565 ITree.Core.ITreeDefinition <> VisF constr
+R6562:6565 ITree.Core.ITreeDefinition <> VisF constr
+inst 6813:6833 <> Proper_eutt_satisfies
+binder 6836:6836 <> E:92
+binder 6838:6839 <> R1:93
+binder 6841:6842 <> R2:94
+binder 6845:6846 <> RR:95
+R6852:6857 Coq.Classes.Morphisms <> Proper class
+R6891:6899 Refinement.theories.Refinement <> satisfies def
+R6901:6901 Refinement.theories.Refinement <> E:92 var
+R6903:6904 Refinement.theories.Refinement <> R1:93 var
+R6906:6907 Refinement.theories.Refinement <> R2:94 var
+R6909:6910 Refinement.theories.Refinement <> RR:95 var
+R6867:6871 Coq.Classes.Morphisms ProperNotations ::signature_scope:x_'==>'_x not
+R6860:6863 ITree.Eq.Eqit <> eutt def
+R6865:6866 Coq.Init.Logic <> eq ind
+R6879:6883 Coq.Classes.Morphisms ProperNotations ::signature_scope:x_'==>'_x not
+R6872:6875 ITree.Eq.Eqit <> eutt def
+R6877:6878 Coq.Init.Logic <> eq ind
+R6884:6886 Coq.Init.Logic <> iff def
+ind 7226:7233 <> refinesF
+constr 7433:7443 <> refines_Ret
+constr 7506:7518 <> refines_TauLR
+constr 7792:7804 <> refines_VisLR
+constr 8033:8051 <> refines_VisLRForall
+constr 8206:8224 <> refines_VisLRExists
+constr 8379:8393 <> refines_forallR
+constr 8528:8542 <> refines_forallL
+constr 8671:8685 <> refines_existsR
+constr 8814:8828 <> refines_existsL
+binder 7236:7237 <> E1:96
+binder 7239:7240 <> E2:97
+binder 7242:7243 <> R1:98
+binder 7245:7246 <> R2:99
+binder 7263:7263 <> A:100
+binder 7265:7265 <> B:101
+R7280:7283 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7276:7277 Refinement.theories.Refinement <> E1:96 var
+R7279:7279 Refinement.theories.Refinement <> A:100 var
+R7288:7291 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7284:7285 Refinement.theories.Refinement <> E2:97 var
+R7287:7287 Refinement.theories.Refinement <> B:101 var
+binder 7250:7251 <> RE:102
+R7307:7310 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7305:7306 Refinement.theories.Refinement <> R1:98 var
+R7313:7316 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7311:7312 Refinement.theories.Refinement <> R2:99 var
+binder 7300:7301 <> RR:103
+R7344:7347 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7328:7337 Refinement.theories.Refinement <> itree_spec syndef
+R7339:7340 Refinement.theories.Refinement <> E1:96 var
+R7342:7343 Refinement.theories.Refinement <> R1:98 var
+R7364:7367 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7348:7357 Refinement.theories.Refinement <> itree_spec syndef
+R7359:7360 Refinement.theories.Refinement <> E2:97 var
+R7362:7363 Refinement.theories.Refinement <> R2:99 var
+binder 7324:7324 <> F:104
+R7396:7399 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7379:7389 Refinement.theories.Refinement <> itree_spec' syndef
+R7417:7420 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7400:7410 Refinement.theories.Refinement <> itree_spec' syndef
+binder 7445:7446 <> r1:107
+binder 7448:7449 <> r2:108
+R7461:7464 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7453:7454 Refinement.theories.Refinement <> RR:103 var
+R7459:7460 Refinement.theories.Refinement <> r2:108 var
+R7456:7457 Refinement.theories.Refinement <> r1:107 var
+R7465:7472 Refinement.theories.Refinement <> refinesF:105 ind
+R7493:7496 ITree.Core.ITreeDefinition <> RetF constr
+R7498:7499 Refinement.theories.Refinement <> r2:108 var
+R7483:7486 ITree.Core.ITreeDefinition <> RetF constr
+R7488:7489 Refinement.theories.Refinement <> r1:107 var
+R7480:7480 Refinement.theories.Refinement <> F:104 var
+R7477:7478 Refinement.theories.Refinement <> RR:103 var
+R7474:7475 Refinement.theories.Refinement <> RE:102 var
+binder 7520:7523 <> phi1:109
+binder 7525:7528 <> phi2:110
+R7549:7552 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7538:7538 Refinement.theories.Refinement <> F:104 var
+R7545:7548 Refinement.theories.Refinement <> phi2:110 var
+R7540:7543 Refinement.theories.Refinement <> phi1:109 var
+R7553:7560 Refinement.theories.Refinement <> refinesF:105 ind
+R7583:7586 ITree.Core.ITreeDefinition <> TauF constr
+R7588:7591 Refinement.theories.Refinement <> phi2:110 var
+R7571:7574 ITree.Core.ITreeDefinition <> TauF constr
+R7576:7579 Refinement.theories.Refinement <> phi1:109 var
+R7568:7568 Refinement.theories.Refinement <> F:104 var
+R7565:7566 Refinement.theories.Refinement <> RR:103 var
+R7562:7563 Refinement.theories.Refinement <> RE:102 var
+binder 7806:7806 <> A:111
+binder 7808:7808 <> B:112
+binder 7810:7811 <> e1:113
+binder 7813:7814 <> e2:114
+binder 7816:7820 <> kphi1:115
+binder 7822:7826 <> kphi2:116
+R7848:7911 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7836:7837 Refinement.theories.Refinement <> RE:102 var
+R7846:7847 Refinement.theories.Refinement <> e2:114 var
+R7843:7844 Refinement.theories.Refinement <> e1:113 var
+R7841:7841 Refinement.theories.Refinement <> B:112 var
+R7839:7839 Refinement.theories.Refinement <> A:111 var
+R7912:7912 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7946:7957 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 7920:7920 <> a:117
+binder 7922:7922 <> b:118
+R7925:7925 Refinement.theories.Refinement <> F:104 var
+R7938:7942 Refinement.theories.Refinement <> kphi2:116 var
+R7944:7944 Refinement.theories.Refinement <> b:118 var
+R7928:7932 Refinement.theories.Refinement <> kphi1:115 var
+R7934:7934 Refinement.theories.Refinement <> a:117 var
+R7958:7965 Refinement.theories.Refinement <> refinesF:105 ind
+R8003:8006 ITree.Core.ITreeDefinition <> VisF constr
+R8022:8026 Refinement.theories.Refinement <> kphi2:116 var
+R8009:8016 Refinement.theories.Refinement <> Spec_vis constr
+R8018:8019 Refinement.theories.Refinement <> e2:114 var
+R7976:7979 ITree.Core.ITreeDefinition <> VisF constr
+R7995:7999 Refinement.theories.Refinement <> kphi1:115 var
+R7982:7989 Refinement.theories.Refinement <> Spec_vis constr
+R7991:7992 Refinement.theories.Refinement <> e1:113 var
+R7973:7973 Refinement.theories.Refinement <> F:104 var
+R7970:7971 Refinement.theories.Refinement <> RR:103 var
+R7967:7968 Refinement.theories.Refinement <> RE:102 var
+binder 8053:8053 <> A:119
+binder 8055:8055 <> B:120
+binder 8057:8061 <> kphi1:121
+binder 8063:8067 <> kphi2:122
+R8077:8077 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8123:8134 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8090:8090 Refinement.theories.Refinement <> A:119 var
+binder 8086:8086 <> a:123
+R8098:8098 Refinement.theories.Refinement <> B:120 var
+binder 8094:8094 <> b:124
+R8102:8102 Refinement.theories.Refinement <> F:104 var
+R8115:8119 Refinement.theories.Refinement <> kphi2:122 var
+R8121:8121 Refinement.theories.Refinement <> b:124 var
+R8105:8109 Refinement.theories.Refinement <> kphi1:121 var
+R8111:8111 Refinement.theories.Refinement <> a:123 var
+R8135:8142 Refinement.theories.Refinement <> refinesF:105 ind
+R8178:8181 ITree.Core.ITreeDefinition <> VisF constr
+R8195:8199 Refinement.theories.Refinement <> kphi2:122 var
+R8183:8193 Refinement.theories.Refinement <> Spec_forall constr
+R8153:8156 ITree.Core.ITreeDefinition <> VisF constr
+R8170:8174 Refinement.theories.Refinement <> kphi1:121 var
+R8158:8168 Refinement.theories.Refinement <> Spec_forall constr
+R8150:8150 Refinement.theories.Refinement <> F:104 var
+R8147:8148 Refinement.theories.Refinement <> RR:103 var
+R8144:8145 Refinement.theories.Refinement <> RE:102 var
+binder 8226:8226 <> A:125
+binder 8228:8228 <> B:126
+binder 8230:8234 <> kphi1:127
+binder 8236:8240 <> kphi2:128
+R8250:8250 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8296:8307 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8263:8263 Refinement.theories.Refinement <> A:125 var
+binder 8259:8259 <> a:129
+R8271:8271 Refinement.theories.Refinement <> B:126 var
+binder 8267:8267 <> b:130
+R8275:8275 Refinement.theories.Refinement <> F:104 var
+R8288:8292 Refinement.theories.Refinement <> kphi2:128 var
+R8294:8294 Refinement.theories.Refinement <> b:130 var
+R8278:8282 Refinement.theories.Refinement <> kphi1:127 var
+R8284:8284 Refinement.theories.Refinement <> a:129 var
+R8308:8315 Refinement.theories.Refinement <> refinesF:105 ind
+R8351:8354 ITree.Core.ITreeDefinition <> VisF constr
+R8368:8372 Refinement.theories.Refinement <> kphi2:128 var
+R8356:8366 Refinement.theories.Refinement <> Spec_exists constr
+R8326:8329 ITree.Core.ITreeDefinition <> VisF constr
+R8343:8347 Refinement.theories.Refinement <> kphi1:127 var
+R8331:8341 Refinement.theories.Refinement <> Spec_exists constr
+R8323:8323 Refinement.theories.Refinement <> F:104 var
+R8320:8321 Refinement.theories.Refinement <> RR:103 var
+R8317:8318 Refinement.theories.Refinement <> RE:102 var
+binder 8395:8395 <> A:131
+binder 8397:8400 <> kphi:132
+binder 8402:8404 <> phi:133
+R8414:8414 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8468:8478 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8426:8426 Refinement.theories.Refinement <> A:131 var
+binder 8422:8422 <> a:134
+R8429:8436 Refinement.theories.Refinement <> refinesF:105 ind
+R8451:8457 ITree.Core.ITreeDefinition <> observe def
+R8460:8463 Refinement.theories.Refinement <> kphi:132 var
+R8465:8465 Refinement.theories.Refinement <> a:134 var
+R8446:8448 Refinement.theories.Refinement <> phi:133 var
+R8444:8444 Refinement.theories.Refinement <> F:104 var
+R8441:8442 Refinement.theories.Refinement <> RR:103 var
+R8438:8439 Refinement.theories.Refinement <> RE:102 var
+R8479:8486 Refinement.theories.Refinement <> refinesF:105 ind
+R8501:8504 ITree.Core.ITreeDefinition <> VisF constr
+R8518:8521 Refinement.theories.Refinement <> kphi:132 var
+R8506:8516 Refinement.theories.Refinement <> Spec_forall constr
+R8496:8498 Refinement.theories.Refinement <> phi:133 var
+R8494:8494 Refinement.theories.Refinement <> F:104 var
+R8491:8492 Refinement.theories.Refinement <> RR:103 var
+R8488:8489 Refinement.theories.Refinement <> RE:102 var
+binder 8544:8544 <> A:135
+binder 8546:8549 <> kphi:136
+binder 8551:8553 <> phi:137
+R8560:8560 Refinement.theories.Refinement <> A:135 var
+binder 8556:8556 <> a:138
+R8571:8571 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8611:8621 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8572:8579 Refinement.theories.Refinement <> refinesF:105 ind
+R8608:8610 Refinement.theories.Refinement <> phi:137 var
+R8590:8596 ITree.Core.ITreeDefinition <> observe def
+R8599:8602 Refinement.theories.Refinement <> kphi:136 var
+R8604:8604 Refinement.theories.Refinement <> a:138 var
+R8587:8587 Refinement.theories.Refinement <> F:104 var
+R8584:8585 Refinement.theories.Refinement <> RR:103 var
+R8581:8582 Refinement.theories.Refinement <> RE:102 var
+R8622:8629 Refinement.theories.Refinement <> refinesF:105 ind
+R8663:8665 Refinement.theories.Refinement <> phi:137 var
+R8640:8643 ITree.Core.ITreeDefinition <> VisF constr
+R8657:8660 Refinement.theories.Refinement <> kphi:136 var
+R8645:8655 Refinement.theories.Refinement <> Spec_forall constr
+R8637:8637 Refinement.theories.Refinement <> F:104 var
+R8634:8635 Refinement.theories.Refinement <> RR:103 var
+R8631:8632 Refinement.theories.Refinement <> RE:102 var
+binder 8687:8687 <> A:139
+binder 8689:8692 <> kphi:140
+binder 8694:8696 <> phi:141
+R8703:8703 Refinement.theories.Refinement <> A:139 var
+binder 8699:8699 <> a:142
+R8714:8714 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8754:8764 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8715:8722 Refinement.theories.Refinement <> refinesF:105 ind
+R8737:8743 ITree.Core.ITreeDefinition <> observe def
+R8746:8749 Refinement.theories.Refinement <> kphi:140 var
+R8751:8751 Refinement.theories.Refinement <> a:142 var
+R8732:8734 Refinement.theories.Refinement <> phi:141 var
+R8730:8730 Refinement.theories.Refinement <> F:104 var
+R8727:8728 Refinement.theories.Refinement <> RR:103 var
+R8724:8725 Refinement.theories.Refinement <> RE:102 var
+R8765:8772 Refinement.theories.Refinement <> refinesF:105 ind
+R8787:8790 ITree.Core.ITreeDefinition <> VisF constr
+R8804:8807 Refinement.theories.Refinement <> kphi:140 var
+R8792:8802 Refinement.theories.Refinement <> Spec_exists constr
+R8782:8784 Refinement.theories.Refinement <> phi:141 var
+R8780:8780 Refinement.theories.Refinement <> F:104 var
+R8777:8778 Refinement.theories.Refinement <> RR:103 var
+R8774:8775 Refinement.theories.Refinement <> RE:102 var
+binder 8830:8830 <> A:143
+binder 8832:8835 <> kphi:144
+binder 8837:8839 <> phi:145
+R8849:8849 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8903:8913 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8861:8861 Refinement.theories.Refinement <> A:143 var
+binder 8857:8857 <> a:146
+R8864:8871 Refinement.theories.Refinement <> refinesF:105 ind
+R8900:8902 Refinement.theories.Refinement <> phi:145 var
+R8882:8888 ITree.Core.ITreeDefinition <> observe def
+R8891:8894 Refinement.theories.Refinement <> kphi:144 var
+R8896:8896 Refinement.theories.Refinement <> a:146 var
+R8879:8879 Refinement.theories.Refinement <> F:104 var
+R8876:8877 Refinement.theories.Refinement <> RR:103 var
+R8873:8874 Refinement.theories.Refinement <> RE:102 var
+R8914:8921 Refinement.theories.Refinement <> refinesF:105 ind
+R8955:8957 Refinement.theories.Refinement <> phi:145 var
+R8932:8935 ITree.Core.ITreeDefinition <> VisF constr
+R8949:8952 Refinement.theories.Refinement <> kphi:144 var
+R8937:8947 Refinement.theories.Refinement <> Spec_exists constr
+R8929:8929 Refinement.theories.Refinement <> F:104 var
+R8926:8927 Refinement.theories.Refinement <> RR:103 var
+R8923:8924 Refinement.theories.Refinement <> RE:102 var
+R8979:8986 Refinement.theories.Refinement <> refinesF ind
+def 9000:9007 <> refines_
+binder 9010:9011 <> E1:147
+binder 9013:9014 <> E2:148
+binder 9016:9017 <> R1:149
+binder 9019:9020 <> R2:150
+binder 9023:9024 <> RE:151
+binder 9026:9027 <> RR:152
+binder 9029:9029 <> F:153
+R9037:9046 Refinement.theories.Refinement <> itree_spec syndef
+R9048:9049 Refinement.theories.Refinement <> E1:147 var
+R9051:9052 Refinement.theories.Refinement <> R1:149 var
+binder 9032:9033 <> t1:154
+R9061:9070 Refinement.theories.Refinement <> itree_spec syndef
+R9072:9073 Refinement.theories.Refinement <> E2:148 var
+R9075:9076 Refinement.theories.Refinement <> R2:150 var
+binder 9056:9057 <> t2:155
+R9091:9098 Refinement.theories.Refinement <> refinesF ind
+R9122:9128 ITree.Core.ITreeDefinition <> observe def
+R9130:9131 Refinement.theories.Refinement <> t2:155 var
+R9109:9115 ITree.Core.ITreeDefinition <> observe def
+R9117:9118 Refinement.theories.Refinement <> t1:154 var
+R9106:9106 Refinement.theories.Refinement <> F:153 var
+R9103:9104 Refinement.theories.Refinement <> RR:152 var
+R9100:9101 Refinement.theories.Refinement <> RE:151 var
+prf 9142:9158 <> monotone_refinesF
+binder 9161:9162 <> E1:156
+binder 9164:9165 <> E2:157
+binder 9167:9168 <> R1:158
+binder 9170:9171 <> R2:159
+binder 9174:9175 <> RE:160
+binder 9177:9178 <> RR:161
+binder 9180:9182 <> ot1:162
+binder 9184:9186 <> ot2:163
+binder 9188:9190 <> sim:164
+binder 9192:9195 <> sim':165
+R9209:9213 Paco.paconotation <> :::x_'<2='_x not
+R9206:9208 Refinement.theories.Refinement <> sim:164 var
+R9214:9217 Refinement.theories.Refinement <> sim':165 var
+binder 9201:9202 <> LE:166
+R9230:9237 Refinement.theories.Refinement <> refinesF ind
+R9239:9240 Refinement.theories.Refinement <> E1:156 var
+R9242:9243 Refinement.theories.Refinement <> E2:157 var
+R9245:9246 Refinement.theories.Refinement <> R1:158 var
+R9248:9249 Refinement.theories.Refinement <> R2:159 var
+R9251:9252 Refinement.theories.Refinement <> RE:160 var
+R9254:9255 Refinement.theories.Refinement <> RR:161 var
+R9257:9259 Refinement.theories.Refinement <> sim:164 var
+R9261:9263 Refinement.theories.Refinement <> ot1:162 var
+R9265:9267 Refinement.theories.Refinement <> ot2:163 var
+binder 9224:9225 <> IN:167
+R9275:9282 Refinement.theories.Refinement <> refinesF ind
+R9299:9301 Refinement.theories.Refinement <> ot2:163 var
+R9295:9297 Refinement.theories.Refinement <> ot1:162 var
+R9290:9293 Refinement.theories.Refinement <> sim':165 var
+R9287:9288 Refinement.theories.Refinement <> RR:161 var
+R9284:9285 Refinement.theories.Refinement <> RE:160 var
+prf 9346:9362 <> monotone_refines_
+binder 9365:9366 <> E1:168
+binder 9368:9369 <> E2:169
+binder 9371:9372 <> R1:170
+binder 9374:9375 <> R2:171
+binder 9378:9379 <> RE:172
+binder 9381:9382 <> RR:173
+R9386:9394 Paco.paco2 <> monotone2 def
+R9398:9405 Refinement.theories.Refinement <> refines_ def
+R9407:9408 Refinement.theories.Refinement <> E1:168 var
+R9410:9411 Refinement.theories.Refinement <> E2:169 var
+R9413:9414 Refinement.theories.Refinement <> R1:170 var
+R9416:9417 Refinement.theories.Refinement <> R2:171 var
+R9419:9420 Refinement.theories.Refinement <> RE:172 var
+R9422:9423 Refinement.theories.Refinement <> RR:173 var
+R9454:9470 Refinement.theories.Refinement <> monotone_refinesF thm
+R9454:9470 Refinement.theories.Refinement <> monotone_refinesF thm
+def 10529:10535 <> refines
+binder 10538:10539 <> E1:174
+binder 10541:10542 <> E2:175
+binder 10544:10545 <> R1:176
+binder 10547:10548 <> R2:177
+binder 10551:10552 <> RE:178
+binder 10554:10555 <> RR:179
+R10575:10578 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R10559:10568 Refinement.theories.Refinement <> itree_spec syndef
+R10570:10571 Refinement.theories.Refinement <> E1:174 var
+R10573:10574 Refinement.theories.Refinement <> R1:176 var
+R10595:10598 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R10579:10588 Refinement.theories.Refinement <> itree_spec syndef
+R10590:10591 Refinement.theories.Refinement <> E2:175 var
+R10593:10594 Refinement.theories.Refinement <> R2:177 var
+R10609:10613 Paco.paco2 <> paco2 def
+R10632:10635 Paco.paconotation <> bot2 def
+R10616:10623 Refinement.theories.Refinement <> refines_ def
+R10628:10629 Refinement.theories.Refinement <> RR:179 var
+R10625:10626 Refinement.theories.Refinement <> RE:178 var
+inst 11111:11127 <> Reflexive_refines
+binder 11130:11130 <> E:180
+binder 11132:11132 <> R:181
+binder 11135:11136 <> RE:182
+binder 11138:11139 <> RR:183
+R11156:11159 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R11143:11152 Refinement.theories.HeterogeneousEventRelations <> ReflexiveE class
+R11154:11155 Refinement.theories.Refinement <> RE:182 var
+R11172:11175 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R11160:11168 Coq.Classes.RelationClasses <> Reflexive class
+R11170:11171 Refinement.theories.Refinement <> RR:183 var
+R11176:11184 Coq.Classes.RelationClasses <> Reflexive class
+R11188:11194 Refinement.theories.Refinement <> refines def
+R11196:11196 Refinement.theories.Refinement <> E:180 var
+R11198:11198 Refinement.theories.Refinement <> E:180 var
+R11200:11200 Refinement.theories.Refinement <> R:181 var
+R11202:11202 Refinement.theories.Refinement <> R:181 var
+R11204:11205 Refinement.theories.Refinement <> RE:182 var
+R11207:11208 Refinement.theories.Refinement <> RR:183 var
+R11280:11286 ITree.Core.ITreeDefinition <> observe def
+R11280:11286 ITree.Core.ITreeDefinition <> observe def
