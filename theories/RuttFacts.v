@@ -3,6 +3,8 @@ From ITree Require Export ITree ITreeFacts Eq.Rutt.
 From Paco Require Import paco.
 From Coq Require Export Eqdep EqdepFacts.
 
+From Equations Require Import Equations.
+
 Require Export HeterogeneousEventRelations.
 
 Ltac inj_existT := repeat match goal with | H : existT _ _ _ = _ |- _ => apply inj_pair2 in H end.
@@ -349,8 +351,7 @@ Proof.
   - rewrite Heqy. setoid_rewrite unfold_iter at 2. cbn. setoid_rewrite bind_ret_l.
     pstep. constructor. pstep_reverse.
 Qed.
-(* ok so now I feel like I have a strong enough coinductive hypothesis, I have proved this up to one 
-   reasonable axiom (that I might be able to remove eventually) and one theorem that I expect to be true *)
+
 Theorem rutt_mrec : 
   forall A B (init1 : D1 A) (init2 : D2 B), 
     REvInv A B init1 init2 -> rutt REvE REvAns (extract REvAnsInv init1 init2)
@@ -431,18 +432,63 @@ Proof.
 Qed.
 
 End MRec.
-  
 
-
-Theorem eutt_mrec (E D1 D2 : Type -> Type) (REvInv : relationEH D1 D2)  (REvAnsInv : forall A B : Type, D1 A -> A -> D2 B -> B -> Prop)
-  (bodies1 : D1 ~> itree (D1 +' E) ) (bodies2 : D2 ~> itree (D2 +' E) ) :
+Theorem eutt_mrec (E D1 D2 : Type -> Type) 
+        (REvInv : relationEH D1 D2)  (REvAnsInv : forall A B : Type, D1 A -> A -> D2 B -> B -> Prop)
+        (bodies1 : D1 ~> itree (D1 +' E) ) (bodies2 : D2 ~> itree (D2 +' E) ) :
   ( forall A B (d1 : D1 A) (d2 : D2 B), REvInv A B d1 d2 -> 
-         rutt (sum_relE REvInv EvEq) (sum_relAns REvAnsInv EvEqAns) (extract REvAnsInv d1 d2)
-            (bodies1 A d1) (bodies2 B d2) ) ->
+                                   rutt (sum_relE REvInv EvEq) (sum_relAns REvAnsInv EvEqAns) (extract REvAnsInv d1 d2)
+                                        (bodies1 A d1) (bodies2 B d2) ) ->
   forall A B (init1 : D1 A) (init2 : D2 B) , 
     REvInv A B init1 init2 -> eutt (extract REvAnsInv init1 init2)
          (mrec bodies1 init1) (mrec bodies2 init2).
 Proof.
   intros.
-  eapply rutt_to_eutt. eapply rutt_mrec; eauto.
+  apply rutt_to_eutt. eapply rutt_mrec; eauto.
 Qed.
+
+
+Section MrecTauTest.
+
+  Variant BoolRec : Type -> Type :=
+    boolrec : BoolRec bool.
+
+  Definition bodies1 (A : Type) (b : BoolRec A) : itree (BoolRec +' BoolRec)  A.
+    destruct b. apply (Ret false).
+  Defined.
+
+  Definition bodies2 (A : Type) (b : BoolRec A) : itree (BoolRec +' BoolRec) A.
+    destruct b. apply (Vis (inr1 boolrec) (fun b => Ret b)).
+  Defined.
+  
+
+  Goal mrec bodies1 boolrec ≅ (Ret false).
+    Proof.
+      unfold mrec, interp_mrec. rewrite unfold_iter. cbn. rewrite bind_ret_l.
+      reflexivity.
+    Qed.
+
+  Goal mrec bodies2 boolrec ≅ ((Vis (boolrec) (fun b => Tau (Ret b)))).
+  Proof.
+    setoid_rewrite unfold_iter. cbn. rewrite bind_vis.
+    setoid_rewrite bind_ret_l. setoid_rewrite unfold_iter. cbn.
+    setoid_rewrite bind_ret_l. reflexivity.
+  Qed.
+
+  (*
+    Ret false <= Vis exists (fun b => Ret b)
+
+
+    ~ Ret false <= Vis exists (fun b => Tau (Ret b)) 
+
+    ~ Ret false <= Tau (Ret false)
+
+   *)
+
+  (*this demonstrates that extra taus get in which is why I need a solution to the eutt 
+    problem, the thing is that it is not clear what that problem would be
+    the saturated thing sounds like a good idea but I looked at the proof and don't see 
+    where it helps, suggesting there may be other counter examples
+   *)
+
+End MrecTauTest.
