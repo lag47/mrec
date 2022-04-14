@@ -723,3 +723,193 @@ Proof.
   intros.
   setoid_rewrite bind_vis. apply eqit_Vis. intros [ | ]; reflexivity.
 Qed.
+
+CoFixpoint interp_mrec_spec' {D E : Type -> Type}
+           (ctx : D ~> itree_spec (D +' E)) {R} (ot : itree_spec' (D +' E) R)
+  : itree_spec E R :=
+  match ot with
+  | RetF r => Ret r
+  | TauF t' => Tau (interp_mrec_spec' ctx (observe t'))
+  | VisF Spec_forall k => Vis Spec_forall (fun x => interp_mrec_spec' ctx (observe (k x)))
+  | VisF Spec_exists k => Vis Spec_exists (fun x => interp_mrec_spec' ctx (observe (k x)))
+  | VisF (Spec_vis (inl1 d)) k => Tau (interp_mrec_spec' ctx (observe (ctx _ d >>= k)))
+  | VisF (Spec_vis (inr1 e)) k =>
+    Vis (Spec_vis e) (fun x => interp_mrec_spec' ctx (observe (k x)))
+  end.
+
+Definition interp_mrec_spec {D E : Type -> Type}
+           (ctx : D ~> itree_spec (D +' E)) {R} (t : itree_spec (D +' E) R) :=
+  interp_mrec_spec' ctx (observe t).
+
+Definition mrec_spec {D E : Type -> Type}
+           (ctx : D ~> itree_spec (D +' E)) : D ~> itree_spec E :=
+  fun R d => interp_mrec_spec ctx (ctx _ d).
+
+Arguments mrec_spec {D E} & ctx [T].
+
+Section Refines5.
+  Context {E1 E2 : Type -> Type}.
+  Context (RE : relationEH E1 E2) (REAns : relationEAns E1 E2).
+
+  Inductive refines5F (F : forall R1 R2, (R1 -> R2 -> Prop) -> itree_spec E1 R1 -> itree_spec E2 R2 -> Prop) :
+     forall R1 R2, (R1 -> R2 -> Prop) -> itree_spec' E1 R1 -> itree_spec' E2 R2 -> Prop := 
+  | refines5F_Ret R1 R2 (RR : R1 -> R2 -> Prop) r1 r2 : RR r1 r2 -> refines5F F _ _ RR (RetF r1) (RetF r2)
+  | refine5F_Tau R1 R2 RR t1 t2 : F R1 R2 RR t1 t2 -> refines5F F _ _ RR (TauF t1) (TauF t2)
+  | refines5F_SpecVis R1 R2 (RR : R1 -> R2 -> Prop) A B (e1 : E1 A) (e2 : E2 B) k1 k2 :
+    RE A B e1 e2 ->
+    (forall a b, REAns A B e1 e2 a b -> F R1 R2 RR (k1 a) (k2 b) ) ->
+    refines5F F R1 R2 RR (VisF (Spec_vis e1) k1) (VisF (Spec_vis e2) k2)
+  | refines5F_Forall R1 R2 (RR : R1 -> R2 -> Prop) A
+                     (k1 : A -> itree_spec E1 R1) (k2 : A -> itree_spec E2 R2) :
+    (forall a, F R1 R2 RR (k1 a) (k2 a) ) -> refines5F F _ _ RR 
+                                              (VisF Spec_forall k1) (VisF Spec_forall k2)
+  | refines5F_Exists R1 R2 (RR : R1 -> R2 -> Prop) A
+                     (k1 : A -> itree_spec E1 R1) (k2 : A -> itree_spec E2 R2) :
+    (forall a, F R1 R2 RR (k1 a) (k2 a) ) -> refines5F F _ _ RR 
+                                              (VisF Spec_exists k1) (VisF Spec_exists k2)
+  | refines5F_ForallL R1 R2 (RR : R1 -> R2 -> Prop) A
+                      (k1 : A -> itree_spec E1 R1) ot (a : A) : 
+    refines5F F R1 R2 RR (observe (k1 a)) ot ->
+    refines5F F R1 R2 RR (VisF Spec_forall k1) ot
+  | refines5F_ForallR R1 R2 (RR : R1 -> R2 -> Prop) A
+                      ot (k2 : A -> itree_spec E2 R2) :
+    (forall a, refines5F F R1 R2 RR ot (observe (k2 a)) ) ->
+    refines5F F R1 R2 RR ot (VisF Spec_forall k2)
+  | refines5F_ExistL R1 R2 (RR : R1 -> R2 -> Prop) A
+                      (k1 : A -> itree_spec E1 R1) ot :
+    (forall a, refines5F F R1 R2 RR (observe (k1 a)) ot ) ->
+    refines5F F R1 R2 RR (VisF Spec_exists k1) ot
+  | refines5F_ExistR R1 R2 (RR : R1 -> R2 -> Prop) A
+                      ot (k2 : A -> itree_spec E2 R2) a:
+    refines5F F R1 R2 RR ot (observe (k2 a)) ->
+    refines5F F R1 R2 RR ot (VisF Spec_exists k2)
+.
+
+  Hint Constructors refines5F.
+
+  Definition refines5_ F R1 R2 RR t1 t2 :=
+    refines5F F R1 R2 RR (observe t1) (observe t2).
+
+  Lemma refines5_monot : monotone5 refines5_.
+  Proof.
+    unfold refines5_. red. intros. 
+    induction IN; eauto.
+  Qed.
+
+  Definition refines5 := paco5 refines5_ bot5.
+
+End Refines5.
+
+#[global] Hint Resolve refines5_monot : paco.
+
+#[local] Hint Constructors refines5F.
+
+Lemma refines_to_refines5 (E1 E2 : Type -> Type) (R1 R2 : Type) 
+      RE REAns (RR : R1 -> R2 -> Prop) : 
+  forall (t1 : itree_spec E1 R1) (t2 : itree_spec E2 R2),
+    refines RE REAns RR t1 t2 -> refines5 RE REAns R1 R2 RR t1 t2.
+Proof.
+  pcofix CIH. intros. pstep. red.
+  punfold H0. red in H0.
+  hinduction H0 before r; intros; pclearbot; eauto.
+  - constructor; auto. intros. eapply H0 in H1. pclearbot.
+    right. eapply CIH; eauto.
+  - constructor. right. eapply CIH; eauto. apply H.
+  - constructor. right. eapply CIH; eauto. apply H.
+Qed.
+
+Lemma refines5_to_refines (E1 E2 : Type -> Type) (R1 R2 : Type) 
+      RE REAns (RR : R1 -> R2 -> Prop) : 
+  forall (t1 : itree_spec E1 R1) (t2 : itree_spec E2 R2),
+    refines5 RE REAns R1 R2 RR t1 t2 -> refines RE REAns RR t1 t2.
+Proof.
+  pcofix CIH. intros. pstep. red.
+  punfold H0. red in H0.
+  hinduction H0 before r; intros; pclearbot; eauto.
+  - constructor; auto. intros. eapply H0 in H1. pclearbot.
+    right. eapply CIH; eauto.
+  - constructor. right. eapply CIH; eauto. apply H.
+  - constructor. right. eapply CIH; eauto. apply H.
+Qed.
+
+
+Section MRecSpec.
+
+
+Context (D1 D2 E1 E2 : Type -> Type).
+
+Context (bodies1 : D1 ~> itree_spec (D1 +' E1)) (bodies2 : D2 ~> itree_spec (D2 +' E2)).
+
+Context (RE : relationEH E1 E2) (REAns : relationEAns E1 E2).
+Context (REInv : relationEH D1 D2) (REAnsInv : relationEAns D1 D2).
+
+Context (Hbodies : forall A B (d1 : D1 A) (d2 : D2 B), 
+            REInv A B d1 d2 -> refines (sum_relE REInv RE) (sum_relEAns REAnsInv REAns) 
+                                 (REAnsInv A B d1 d2) (bodies1 A d1) (bodies2 B d2) ).
+
+(*         (forall (phi2 : itree_spec (D2 +' E2) B) (phi1 : itree_spec (D1 +' E1) A),
+            paco2 (refines_ (sum_relE REInv RE) (sum_relEAns REAnsInv REAns) (REAnsInv A B d1 d2)) bot2 phi1
+                  phi2 ->
+            r A B (REAnsInv A B d1 d2) (interp_mrec_spec' bodies1 (observe phi1))
+              (interp_mrec_spec' bodies2 (observe phi2))) *)
+
+    Lemma refines_interp_mrec_aux:
+      forall (A : Type) (d1 : D1 A) (B : Type) (d2 : D2 B)
+             (r : forall x x0 : Type, (x -> x0 -> Prop) -> itree_spec E1 x -> itree_spec E2 x0 -> Prop),
+        (forall (A0 : Type) (init1 : D1 A0) (B0 : Type) (init2 : D2 B0),
+            REInv A0 B0 init1 init2 ->
+            r A0 B0 (REAnsInv A0 B0 init1 init2) (mrec_spec bodies1 init1) (mrec_spec bodies2 init2)) ->
+        forall (phi2 : itree_spec (D2 +' E2) B) (phi1 : itree_spec (D1 +' E1) A),
+          paco2 (refines_ (sum_relE REInv RE) (sum_relEAns REAnsInv REAns) (REAnsInv A B d1 d2)) bot2 phi1
+                phi2 ->
+          paco5 (refines5_ RE REAns) r A B (REAnsInv A B d1 d2) (interp_mrec_spec' bodies1 (observe phi1))
+                (interp_mrec_spec' bodies2 (observe phi2)).
+    Proof.
+      intros A d1 B d2 r. intros CIH1. pcofix CIH2. intros phi2 phi1 Hphi.
+      punfold Hphi. red in Hphi. pstep. red. 
+      hinduction Hphi before r; intros; eauto.
+      - cbn. constructor; auto.
+      - cbn. constructor. right. pclearbot. eapply CIH2; eauto.
+      - inv H; inj_existT; subst.
+        + cbn. constructor. right. eapply CIH2; eauto. 
+          eapply refines_bind. eapply Hbodies; eauto.
+          intros. eapply sum_relEAns_inl in H. eapply H0 in H.
+          pclearbot. auto.
+        + cbn. constructor; auto. intros. right. eapply CIH2; eauto.
+          eapply sum_relEAns_inr in H. eapply H0 in H. pclearbot. auto.
+      - cbn. constructor. right. eapply CIH2; pclearbot; eauto.
+      - cbn. constructor. right. eapply CIH2; pclearbot; eauto.
+      - cbn. constructor. intros. eapply H0; eauto.
+      - cbn. econstructor. eapply IHHphi; eauto.
+      - cbn. econstructor. eapply IHHphi; eauto.
+      - cbn. constructor. intros. eapply H0; eauto.
+    Qed.
+Theorem refines_mrec : forall A B (init1 : D1 A) (init2 : D2 B),
+    REInv A B init1 init2 -> refines RE REAns (REAnsInv A B init1 init2)
+                                    (mrec_spec bodies1 init1) (mrec_spec bodies2 init2).
+Proof.
+  intros. apply refines5_to_refines. generalize dependent B.
+  generalize dependent A. pcofix CIH. intros A d1 B d2 Hd.
+  unfold mrec_spec, interp_mrec_spec.
+  pstep. red. cbn.
+  eapply Hbodies in Hd as Hd'. punfold Hd'. red in Hd'.
+  hinduction Hd' before r; intros; pclearbot; eauto.
+  - cbn. constructor; auto.
+  - cbn. constructor. left. eapply refines_interp_mrec_aux; eauto.
+  - inv H; inj_existT; subst; cbn.
+    + constructor. left. eapply refines_interp_mrec_aux; eauto.
+      eapply refines_bind; eauto. intros.
+      eapply sum_relEAns_inl in H. eapply H0 in H. pclearbot. auto.
+    + constructor; auto. intros. left. 
+      eapply refines_interp_mrec_aux; eauto.
+      eapply sum_relEAns_inr in H. eapply H0 in H. pclearbot. auto.
+  - cbn. constructor. left. eapply refines_interp_mrec_aux; eauto.
+  - cbn. constructor. left. eapply refines_interp_mrec_aux; eauto.
+  - cbn. constructor. intros. eapply H0; eauto.
+  - cbn. econstructor. eapply IHHd'; eauto.
+  - cbn. econstructor. eapply IHHd'; eauto.
+  - cbn. constructor. intros; eapply H0; eauto.
+Qed.
+
+
+End MRecSpec.
