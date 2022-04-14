@@ -170,6 +170,42 @@ Proof.
 Qed.
 (* Print Assumptions not_Proper_eutt_satisfies_impl. *)
 
+Variant paddedF {E R} (F : itree E R -> Prop) : itree' E R -> Prop :=
+  | paddedF_Ret r : paddedF F (RetF r)
+  | paddedF_Tau t : F t -> paddedF F (TauF t)
+  | paddedF_VisTau A e (k : A -> itree E R) :
+    (forall a, F (k a)) -> paddedF F (VisF e (fun a => (Tau (k a ))))
+.
+
+Definition padded_ {E R} F (t : itree E R) := paddedF F (observe t).
+
+Lemma padded_monot {E R} : monotone1 (@padded_ E R).
+Proof.
+  unfold padded_. red. intros. inv IN; econstructor; eauto.
+Qed.
+
+#[global] Hint Resolve padded_monot : paco.
+
+Definition padded {E R} (t : itree E R) : Prop := paco1 padded_ bot1 t.
+
+Lemma padded_Ret E R r : @padded E R (Ret r).
+Proof. pstep. constructor. Qed.
+
+Lemma padded_Tau E R (t : itree E R) : padded t -> padded (Tau t).
+Proof. intros. pstep. constructor. left. auto. Qed.
+
+Lemma padded_VisTau E R A (e : E A) (k : A -> itree E R) :
+  (forall a, padded (k a)) -> padded (Vis e (fun a => Tau (k a))).
+Proof.
+  intros. pstep. red. cbn. constructor. left. apply H.
+Qed.
+
+Lemma padded_Vis_inv E R A (e : E A) (k : A -> itree E R) : 
+  padded (Vis e k ) -> exists k', forall a, k a ≅ Tau (k' a).
+Proof.
+  intro Hek. pinversion Hek. inj_existT. subst. exists k1. reflexivity.
+Qed.
+
 Section Refines.
 (***
  *** Refinement of itree specs
@@ -186,24 +222,14 @@ Inductive refinesF  (F : itree_spec E1 R1 -> itree_spec E2 R2 -> Prop) :
   | refines_Ret r1 r2 : RR r1 r2 -> refinesF F (RetF r1) (RetF r2)
   | refines_TauLR phi1 phi2 :
       F phi1 phi2 -> refinesF F (TauF phi1) (TauF phi2)
-(*
   | refines_TauL phi ophi :
       refinesF F (observe phi) ophi -> refinesF F (TauF phi) ophi
   | refines_TauR ophi phi :
       refinesF F ophi (observe phi) -> refinesF F ophi (TauF phi)
-*)
   | refines_VisLR A B e1 e2 kphi1 kphi2 :
       RE A B e1 e2 ->
       (forall a b, REAns A B e1 e2 a b -> F (kphi1 a) (kphi2 b) ) ->
       refinesF F (VisF (Spec_vis e1) kphi1) (VisF (Spec_vis e2) kphi2)
-
-  (*removing these rules may help with simplicity*)
-  | refines_VisLRForall A kphi1 kphi2 :
-      (forall (a : A), F (kphi1 a) (kphi2 a) ) ->
-      refinesF F (VisF Spec_forall kphi1) (VisF Spec_forall kphi2)
-  | refines_VisLRExists A kphi1 kphi2 :
-      (forall (a : A), F (kphi1 a) (kphi2 a) ) ->
-      refinesF F (VisF Spec_exists kphi1) (VisF Spec_exists kphi2)
   | refines_forallR A kphi phi :
       (forall a : A, refinesF F phi (observe (kphi a))) ->
       refinesF F phi (VisF Spec_forall kphi)
@@ -272,7 +298,7 @@ End Refines.
 
 #[global] Hint Resolve monotone_refines_ : paco.
 
-Hint Constructors refinesF.
+#[global] Hint Constructors refinesF.
 
 (* need a little library of heterogeneous event relations to express theorems  *)
 
@@ -280,10 +306,11 @@ Hint Constructors refinesF.
 Instance Reflexive_refines {E R} RE REAns RR : 
   ReflexiveE RE -> ReflexiveEAns REAns -> Reflexive RR -> Reflexive (@refines E E R R RE REAns RR).
 Proof.
-  red. pcofix CIH. intros HRR HRE HREAns t. pfold. red.
+Abort.
+(*  red. pcofix CIH. intros HRR HRE HREAns t. pfold. red.
   destruct (observe t); try destruct e; econstructor; eauto.
   intros. right. apply HRE in H. subst. eauto.
-Qed.
+Qed. *)
 
   (* this exposes a flaw in current definition, could fix by adding restrictions to return values of events like I do in rutt, in the mrec rule it seems like that would be neccesary
 
@@ -316,18 +343,12 @@ Proof.
   pfold. revert a. red. punfold Href. red in Href.
   cbn in *. remember (observe t) as ot. clear Heqot.
   remember (VisF Spec_forall k) as x.
-  hinduction Href before r; intros; inv Heqx; inj_existT; subst; pclearbot.
-  - econstructor. Unshelve. 2 : apply a. specialize (H a).
-    assert (paco2 (refines_ RE RAns RR) r (kphi1 a) (k a)).
-    eapply paco2_mon; intros; eauto; try contradiction.
-    pstep_reverse.
+  hinduction Href before r; intros; inv Heqx; inj_existT; subst; pclearbot; eauto.
   - clear H0. assert (refines RE RAns RR (go phi) (k a) ).
     { pstep. apply H. }
     enough (paco2 (refines_ RE RAns RR) r (go phi) (k a) ).
     { punfold H1. }
     eapply paco2_mon; eauto. intros; contradiction.
-  - econstructor. Unshelve. 2 : apply a. eapply IHHref; eauto.
-  - econstructor. intros. eapply H0; eauto.
 Qed.
 
 Lemma refines_Vis_existsL : forall (E1 E2 : Type -> Type) (R1 R2 A : Type) RE REAns RR 
@@ -339,13 +360,14 @@ Proof.
   intros. pfold. red. punfold Href. red in Href.
   remember (observe t) as ot. clear Heqot. cbn in *.
   remember (VisF Spec_exists k) as x. 
-  hinduction Href before A; intros; inv Heqx; inj_existT; subst.
-  - pclearbot. econstructor. specialize (H a). punfold H.
-  - econstructor. intros. eapply H0; eauto.
-  - econstructor. eapply IHHref; eauto.
-  - eauto.
+  hinduction Href before A; intros; inv Heqx; inj_existT; subst; eauto.
 Qed.
 
+(*so this did not give me the inversion principles I naively hoped for,
+  but that doesn't necessarily invalidate the padded itree approach,
+  it is also worth considering if the trim itree appraoch (which admittedly has problems)
+  is better than eddy's tau, multi-refines closure thing
+ *)
 
 
 (* A version of refinesF specialized to a forall on the left *)
@@ -364,6 +386,9 @@ Inductive forallRefinesF {E1 E2 R1 R2} RE RAns (RR : R1 -> R2 -> Prop) (F : itre
   | forallRefines_existsR B kphi2 (b : B) :
       (forallRefinesF RE RAns RR F kphi1 (observe (kphi2 b))) ->
       forallRefinesF RE RAns RR F kphi1 (VisF Spec_exists kphi2)
+  | forallRefines_TauR phi2 :
+    forallRefinesF RE RAns RR F kphi1 (observe phi2) ->
+    forallRefinesF RE RAns RR F kphi1 (TauF phi2)
 .
 
 (* FIXME: should we replace the recursive call to refinesF in the above with
@@ -374,21 +399,41 @@ Lemma refinesF_Vis_forallL : forall (E1 E2 : Type -> Type) (R1 R2 A : Type) RE R
     refinesF RE RAns RR F (VisF Spec_forall k) t ->
     @forallRefinesF E1 E2 R1 R2 RE RAns RR F A k t.
 Proof.
-  intros. remember (VisF Spec_forall k) as t1. induction H.
-  - inversion Heqt1.
-  - inversion Heqt1.
-  - inversion Heqt1.
+  intros. remember (VisF Spec_forall k) as t1. induction H; try discriminate.
+  - constructor. eauto.
   - inversion Heqt1. subst. inj_existT. subst.
     constructor. auto.
-  - inversion Heqt1. 
-  - constructor. auto.
-  - inversion Heqt1. subst. inj_existT; subst. econstructor; eauto.
-  - subst.
-    eapply forallRefines_existsR. eauto.
-  - inversion Heqt1.
+  - inversion Heqt1. subst. inj_existT. subst. econstructor; eauto.
+  - eapply forallRefines_existsR. eauto.
 Qed.
 
-(* not sure what is wrong here *)
+Lemma refines_TauL_inv : forall (E1 E2 : Type -> Type) (R1 R2: Type) RE RAns RR
+                                   (phi1 : itree_spec E1 R1) (phi2 : itree_spec E2 R2),
+      refines RE RAns RR (Tau phi1) phi2 -> refines RE RAns RR phi1 phi2.
+Proof.
+  intros E1 E2 R1 R2 RE RAns RR. pcofix CIH.
+  intros. pstep. punfold H0. red in H0. red. cbn in *. remember (TauF phi1) as x.
+  hinduction H0 before r; intros; inv Heqx; pclearbot; eauto.
+  - constructor. pstep_reverse. eapply paco2_mon; eauto. intros; contradiction.
+  - rewrite itree_eta'. pstep_reverse.
+    apply paco2_mon with (r := bot2). pstep. auto. intros. contradiction.
+Qed.
+
+Lemma refines_TauR_inv : forall (E1 E2 : Type -> Type) (R1 R2: Type) RE RAns RR
+                                   (phi1 : itree_spec E1 R1) (phi2 : itree_spec E2 R2),
+      refines RE RAns RR phi1 (Tau phi2) -> refines RE RAns RR phi1 phi2.
+Proof.
+  intros E1 E2 R1 R2 RE RAns RR. pcofix CIH.
+  intros. pstep. punfold H0. red in H0. red. cbn in *. remember (TauF phi2) as x.
+  hinduction H0 before r; intros; inv Heqx; pclearbot; eauto.
+  - constructor. pstep_reverse. eapply paco2_mon; eauto. intros; contradiction.
+  - rewrite itree_eta' at 1. pstep_reverse.
+    apply paco2_mon with (r := bot2). pstep. auto. intros. contradiction.
+Qed.
+(*
+(* it would be a good idea to try to understand if there are other non-trim based counterexamples*)
+
+(*hopefully this should be able to go away now *)
 (* A version of refinesF specialized to a Tau on the left *)
 Inductive tauRefinesF {E1 E2 R1 R2} (RR : R1 -> R2 -> Prop) (F : itree_spec E1 R1 -> itree_spec E2 R2 -> Prop)
           (phi1: itree_spec E1 R1)
@@ -409,10 +454,10 @@ Lemma refinesF_Tau : forall (E1 E2 : Type -> Type) (R1 R2 : Type) RE REAns RR F
 Proof.
   intros. remember (TauF t1) as t. induction H; inversion Heqt.
   - rewrite <- H1. constructor. assumption.
-  - constructor. intro b. apply H0. assumption.
+  - subst. econstructor. intro b. apply H0. assumption.
   - econstructor. apply IHrefinesF. assumption.
 Qed.
-
+*)
 
 Inductive isConcreteF {E R} (F : itree_spec E R -> Prop) :
   itree_spec' E R -> Prop :=
@@ -449,102 +494,210 @@ Proof.
   rewrite H3 in H0. pclearbot. apply H0.
 Qed.
 
+Lemma refines_Vis_existsR:
+  forall (E1 : Type -> Type) (R1 : Type) (E2 : Type -> Type) (R2 : Type) 
+    (RE1 : relationEH E1 E2) (REAns1 : relationEAns E1 E2) (RR1 : R1 -> R2 -> Prop) 
+    (A : Type) (kphi : A -> itree_spec E2 R2) (phi1 : itree_spec E1 R1),
+    refines RE1 REAns1 RR1 phi1
+             (Vis Spec_exists kphi) ->
+    isConcrete phi1 -> exists a : A, refines RE1 REAns1 RR1 phi1 (kphi a).
+Proof.
+  intros E1 R1 E2 R2 RE1 REAns1 RR1 A kphi phi1 Href.
+  punfold Href. red in Href.
+  cbn in *. intros. punfold H. red in H.
+  enough (exists a, refinesF RE1 REAns1 RR1 (upaco2 (refines_ RE1 REAns1 RR1) bot2) 
+           (observe phi1) (observe (kphi a))).
+  destruct H0. eexists. pstep. eauto.
+  remember (VisF Spec_exists kphi) as y.
+  hinduction Href before RE1; intros; inv Heqy; eauto.
+  - inv H. pclearbot. punfold H1. eapply IHHref in H1; eauto.
+    destruct H1. eexists. constructor. eauto.
+  - inv H.
+  - inv H1.
+Qed.
+
+
+(* so whats next, *)
 (* Transitivity of refinement if the LHS is concrete *)
 Theorem concreteRefinesTrans {E1 E2 E3 R1 R2 R3} RE1 RE2 REAns1 REAns2 
         (RR1 : R1 -> R2 -> Prop) (RR2 : R2 -> R3 -> Prop) 
         (t1 : itree_spec E1 R1) (t2 : itree_spec E2 R2) (t3 : itree_spec E3 R3)
          (isc:isConcrete t1) :
+  padded t2 -> padded t3 ->
   refines RE1 REAns1 RR1 t1 t2 -> refines RE2 REAns2 RR2 t2 t3 -> 
   refines (rcomposeE RE1 RE2) (rcomposeEAns REAns1 REAns2 
                                   (fun A B C e1 e2 e3 => RE1 A B e1 e2 /\ RE2 B C e2 e3 ) ) 
           (rcompose RR1 RR2) t1 t3.
 Proof.
-  revert t1 t2 t3 isc; pcofix CIH. intros t1 t2 t3 isc Ht12 Ht23.
+  revert t1 t2 t3 isc; pcofix CIH. intros t1 t2 t3 isc  Ht2 Ht3 Ht12 Ht23.
   pfold. red. punfold Ht12. red in Ht12.
-  punfold Ht23. red in Ht23.
-  remember (observe t3) as ot3. clear t3 Heqot3.
+  punfold Ht23. red in Ht23. punfold Ht3. red in Ht3.
+  punfold Ht2. red in Ht2.
+  remember (observe t3) as ot3.  clear t3 Heqot3.
   punfold isc. red in isc. remember (observe t1) as ot1. clear t1 Heqot1.
   hinduction Ht12 before r; intros.
-  - remember (RetF r2) as x.
+  - remember (RetF r2) as x. clear Ht2 Ht3.
     hinduction Ht23 before r; intros; inv Heqx; eauto.
     constructor. econstructor; eauto.
-  - pclearbot. remember (TauF phi2) as x. inversion isc.
-    hinduction Ht23 before r; intros; inv Heqx; pclearbot; eauto.
   - pclearbot. 
-    (* this is where the new reasoning is focused at the moment *)
-    remember (VisF (Spec_vis e2) kphi2) as x.
-      hinduction Ht23 before r; intros; inv Heqx; inj_existT; subst; eauto.
-    rename H0 into HRR2. rename H2 into HRR1.
-    constructor. econstructor; eauto. intros.
-    right. 
-    inv H0.
-    subst. inj_existT. subst.
-    specialize (H8 B0 e3).
-    assert (Hb0 :  exists b0 : B0, REAns1 A0 B0 e0 e3 a b0 /\ REAns2 B0 B e3 e2 b0 b).
-    eapply H8; split; eauto.
-    decompose record Hb0. rename x into b0.
-    eapply CIH; eauto.
-    eapply isConcreteVisInv. pstep. eauto.
-    eapply HRR1 in H2; eauto. destruct H2; try contradiction; eauto.
-    eapply HRR2 in H3; destruct H3; try contradiction; eauto.
-  - inv isc.
-  - inv isc.
+    assert (Hdec :  (exists t4, ot3 = TauF t4) \/ (forall t4, ot3 <> TauF t4) ).
+    { destruct ot3; eauto; right; repeat intro; discriminate. }
+    destruct Hdec as [ [t4 Ht4] | Ht4 ]; subst.
+    + constructor. right. eapply CIH; eauto. inv isc. pclearbot. auto.
+      inv Ht2. pclearbot. auto. inv Ht3. pclearbot. auto.
+      apply refines_TauL_inv. apply refines_TauR_inv. pstep. auto.
+    + destruct ot3; try (exfalso; eapply Ht4; eauto; fail).
+      * constructor. inv Ht23. clear Ht2 Ht3.
+        punfold H. red in H. remember (RetF r0) as y.
+        remember (observe phi2) as ophi2. 
+        hinduction H1 before r; intros; inv Heqy; eauto.
+        -- remember (RetF r1) as y. hinduction H0 before r; intros; inv Heqy; eauto.
+           constructor. econstructor; eauto.
+        -- eapply IHrefinesF; eauto.
+           pstep_reverse. apply refines_TauR_inv. pstep. auto.
+        -- eapply IHrefinesF; eauto. pstep_reverse.
+           eapply refines_Vis_forallR. pstep. auto.
+        -- inv isc. pclearbot. 
+          assert (exists a, refines RE1 REAns1 RR1 phi1 (kphi a)).
+          { apply refines_Vis_existsR; auto. pstep. auto. }
+          destruct H2 as [a Ha]. eapply H0; eauto. pstep_reverse.
+      * inv Ht3. inj_existT. subst.
+        {
+          destruct e; pclearbot.
+          - inv Ht23. constructor.
+            punfold H. red in H. 
+            inv isc. pclearbot.
+            remember ((VisF (Spec_vis e) (fun a : X => Tau (k1 a)))) as y.
+            remember (observe phi2) as ophi2.
+            punfold H3. red in H3.
+            remember (observe phi1) as ophi1.
+            hinduction H2 before r; intros; inv Heqy; inj_existT; subst; eauto.
+            + eapply IHrefinesF; eauto. pstep_reverse.
+              apply refines_TauR_inv. pstep. auto.
+              inv Ht2. rewrite Heqophi2. pclearbot. pstep_reverse.
+            +  assert (Hkphi1 : forall a, padded (kphi1 a)).
+              {
+                inv Ht2. pclearbot. punfold H5. red in H5. rewrite <- Heqophi2 in H5.
+                inv H5. inj_existT. subst. intros. pstep. constructor. auto.
+              }
+              remember (VisF (Spec_vis e1) kphi1 ) as y.
+              assert (Hk1 : forall (a : A) (b : X),
+                         REAns2 A X e1 e a b -> 
+                         upaco2 (refines_ RE2 REAns2 RR2) bot2 (kphi1 a) ((k1 b))).
+              intros. apply H0 in H4. clear - H4. pclearbot. left. 
+              apply refines_TauR_inv. auto. 
+              remember (observe phi1) as ophi1.
+              clear H0.
+              hinduction H1 before r; intros; inv Heqy; inj_existT; subst; eauto.
+              constructor. eapply IHrefinesF; eauto. inv H3. pclearbot. pstep_reverse.
+              constructor. econstructor; eauto. intros.
+              right. inv H4. inj_existT; subst.
+              assert (exists b0 : A0, REAns1 A A0 e1 e0 a b0 /\ REAns2 _ X e0 e b0 b).
+              eapply H11; eauto. destruct H4 as [b0 [ Hb01 Hb02] ].
+              eapply CIH; eauto. inv H3. inj_existT. subst. pclearbot. apply H5.
+              pstep. constructor. left. auto.
+              eapply H0 in Hb01. destruct Hb01; eauto. contradiction.
+              pstep. constructor. eapply Hk1 in Hb02. pstep_reverse.
+              destruct Hb02; auto. contradiction.
+              inv H3.
+              inv H3.
+           + eapply IHrefinesF; eauto. pstep_reverse. eapply refines_Vis_forallR.
+             pstep. auto. inv Ht2. pclearbot. punfold H4. red in H4. rewrite <- Heqophi2 in H4.
+             inv H4. inj_existT. subst. constructor. left. pstep.
+             constructor; auto.
+           + remember (VisF Spec_exists kphi) as y. remember (observe phi1) as ophi1.
+             hinduction H1 before r; intros; inv Heqy; inj_existT; subst.
+             * constructor. eapply IHrefinesF; eauto. inv H3. pclearbot. pstep_reverse.
+             * inv H3.
+             * eapply H0; eauto. inv Ht2. pclearbot. punfold H5. red in H5.
+               rewrite <- Heqophi2 in H5. inv H5. inj_existT. subst.
+               constructor. left. pstep. constructor. auto.
+             * inv H4.
+          - assert (refines RE2 REAns2 RR2 (Tau phi2) (Vis Spec_forall (fun a => Tau (k1 a)) )).
+            pstep. auto.
+            apply refines_forallR. intros. constructor. right.
+            eapply CIH; eauto. inv isc. pclearbot. auto.
+            inv Ht2. pclearbot. auto. apply H1.
+            apply refines_TauL_inv. apply refines_TauR_inv.
+            eapply refines_Vis_forallR in H0. eauto.
+          - assert (refines RE2 REAns2 RR2 (Tau phi2) (Vis Spec_exists (fun a => Tau (k1 a)) )).
+            pstep. auto. apply refines_TauL_inv in H0.
+            punfold H. red in H.
+            punfold H0. red in H0.
+            cbn in *. remember (VisF Spec_exists (fun a : X => Tau (k1 a))) as y.
+            clear Ht23. remember (observe phi2) as ophi2.
+            hinduction H0 before r; intros; inv Heqy; inj_existT; subst; eauto.
+            + eapply IHrefinesF; eauto. pstep_reverse.
+              apply refines_TauR_inv. pstep. auto.  subst.
+              inv Ht2. pclearbot. rewrite Heqophi2. pstep_reverse.
+            + eapply IHrefinesF; eauto. pstep_reverse.
+              eapply refines_Vis_forallR. pstep. auto.
+              inv Ht2. pclearbot. punfold H3. red in H3. rewrite <- Heqophi2 in H3.
+              inv H3. inj_existT. subst. constructor. left. pclearbot.
+              pstep. constructor. left. auto.
+            + 
+              (*this step did seem to use=need the paddedness condition *)
+              eapply refines_existsR. Unshelve. all : auto.
+              constructor. right. eapply CIH with (t2 := phi2); eauto. inv isc. pclearbot. auto.
+              inv Ht2. pclearbot. auto. apply H1. pstep. auto.
+              apply refines_TauR_inv. pstep. auto.
+            + (* this may be a mistake, be willing to undo this clear *)
+              remember (VisF Spec_exists kphi) as y. remember (observe phi1) as ophi1.
+              hinduction H1 before r; intros; inv Heqy.
+              * constructor. rewrite <- Heqophi1. eapply IHrefinesF; eauto.
+                inv isc. pclearbot. punfold H5. red in H5. rewrite Heqophi1. auto.
+              * (* this *) inv isc. pclearbot. clear -H5 Heqophi1. exfalso.
+                punfold H5. red in H5. rewrite <- Heqophi1 in H5. inv H5.
+              * inj_existT. subst. eapply H0; eauto.
+                clear - Heqophi2 Ht2. inv Ht2. pclearbot. punfold H0.
+                red in H0. rewrite <- Heqophi2 in H0. inv H0. inj_existT. subst.
+                pclearbot. constructor. left. pstep. constructor. left. auto.
+              * exfalso. clear - Heqophi1 isc.
+                inv isc. pclearbot. punfold H0. red in H0. rewrite <- Heqophi1 in H0.
+                inv H0.
+          }
+  - constructor. eapply IHHt12; eauto. inv isc. pclearbot. punfold H0.
+  -  eapply IHHt12; eauto. inv Ht2. pclearbot. pstep_reverse. 
+     rewrite itree_eta'. pstep_reverse. apply refines_TauL_inv. pstep. auto.
+  - remember (VisF (Spec_vis e2) kphi2) as x.
+    hinduction Ht23 before r; intros; inv Heqx; inj_existT; subst; eauto.
+    + constructor. eapply IHHt23; eauto. inv Ht3. pclearbot. punfold H2.
+    + pclearbot. constructor; eauto. econstructor; eauto.
+      intros. right. 
+      inv H3. inj_existT. subst.
+      assert (exists b0 : B0, REAns1 A0 B0 e0 e3 a b0 /\ REAns2 B0 B e3 e2 b0 b).
+      eapply H10; eauto. destruct H3 as [b0 [Hb01 Hb02] ].
+      eapply CIH with (t2 := kphi3 b0); eauto.
+      * inv isc. inj_existT. subst. pclearbot. apply H4.
+      * inv Ht2. inj_existT. subst. pstep. constructor. auto.
+      * inv Ht3. inj_existT. subst. pstep. constructor. auto.
+      * eapply H2 in Hb01. clear - Hb01. pclearbot. auto.
+      * eapply H0 in Hb02. clear - Hb02. pclearbot. auto.
+    + constructor. intros. eapply H0; eauto. inv Ht3. inj_existT.
+      subst. constructor. left. pclearbot. auto.
+    + econstructor. eapply IHHt23; eauto. inv Ht3. inj_existT. subst.
+      constructor. auto.
   - remember (refinesF_Vis_forallL _ _ _ _ _ _ _ _ _ _ _ Ht23) as Ht23'.
     clear HeqHt23' Ht23. induction Ht23'; pclearbot.
     * apply refines_forallR. intro a. pclearbot.
-      eapply H0; [ apply CIH | assumption | ]. pstep_reverse.
-      destruct (H1 a); [eauto | contradiction].
+      eapply H0. eapply CIH. auto.
+      pstep_reverse. Unshelve. all : auto. inv Ht2.
+      inj_existT. subst. pstep. constructor. auto. inv Ht3.
+      inj_existT. subst. constructor. auto. pstep_reverse. clear - H1. pclearbot.  apply H1.
     * apply refines_forallR. intro b. apply H2.
-    * eapply H0; eassumption.
-    * eapply refines_existsR. eassumption.
-  - inversion isc.
-  - assert (refines RE2 REAns2 RR2 (Vis Spec_exists kphi) (go ot3)); [ pfold; apply Ht23 | ].
-    apply IHHt12; try assumption.
-    remember (refines_Vis_existsL _ _ _ _ _ _ _ _ (go ot3) kphi H a). clear Heqr0.
-    red in r0. punfold r0.
-  - inversion isc.
+      inv Ht3. inj_existT. subst. constructor. auto.
+    * eapply H0; eauto. inv Ht2. inj_existT. subst. constructor. auto.
+    * econstructor. eapply IHHt23'; eauto. inv Ht3. inj_existT. subst. constructor.
+      auto.
+    * constructor. eapply IHHt23'; eauto. inv Ht3. pclearbot. pstep_reverse.
+  - inv isc.
+  - eapply IHHt12; eauto. inv Ht2. inj_existT. subst. constructor. auto.
+    rewrite itree_eta'.
+    pstep_reverse. apply refines_Vis_existsL. pstep. auto.
+  - inv isc.
 Qed.
 
-(*
-(* Refinement defines a subset for satisfaction *)
-Theorem refinesSatisfiesSubset {E R1 R2 R3} (RR1 : R1 -> R2 -> Prop) (RR2 : R2 -> R3 -> Prop) 
-        (t1 : itree E R1) t2 t3 :
-  satisfies RR1 t1 t2 -> refines RR2 t2 t3 -> satisfies (rcompose RR1 RR2) t1 t3.
-Proof.
-  revert t1 t2 t3; pcofix CIH. intros t1 t2 t3 Ht12 Ht23.
-  pfold. red. punfold Ht12. red in Ht12.
-  punfold Ht23. red in Ht23.
-  remember (observe t3) as ot3. clear t3 Heqot3.
-  remember (observe t1) as ot1. clear t1 Heqot1.
-  hinduction Ht12 before CIH; intros.
-  - remember (RetF r2) as x.
-    hinduction Ht23 before r; intros; inv Heqx; eauto.
-  - pclearbot. remember (TauF phi2) as x.
-    hinduction Ht23 before r; intros; inv Heqx; pclearbot; eauto.
-  - constructor. apply IHHt12; assumption.
-  - remember (refinesF_Tau _ _ _ _ _ _ _ Ht23) as Ht23'. clear HeqHt23' Ht23.
-    induction Ht23'.
-    + constructor. apply IHHt12. pclearbot. punfold H.
-    + constructor. intro b. apply H0.
-    + econstructor. eassumption.
-  - pclearbot.
-    + remember (VisF (Spec_vis e) kphi2) as x.
-      hinduction Ht23 before r; intros; inv Heqx; inj_existT; subst; eauto.
-      pclearbot. econstructor. right. eapply CIH; try apply H0; try apply H.
-  - remember (refinesF_Vis_forallL _ _ _ _ _ _ _ _ Ht23) as Ht23'.
-    clear HeqHt23' Ht23. induction Ht23'.
-    * apply satisfies_forallR. intro a.
-      apply (H0 a). pstep_reverse.
-      destruct (H1 a); [eauto | contradiction].
-    * apply satisfies_forallR. intro b. apply H2.
-    * eapply H0; eassumption.
-    * eapply satisfies_existsR. eassumption.
-  - assert (refines RR2 (Vis Spec_exists kphi) (go ot3)); [ pfold; apply Ht23 | ].
-    apply IHHt12; try assumption.
-    remember (refines_Vis_existsL _ _ _ _ _ (go ot3) kphi H a). clear Heqr0.
-    red in r0. punfold r0.
-Qed.
-*)
+
 Ltac use_simpobs := repeat match goal with
                            | H : RetF _ = observe ?t |- _ => apply simpobs in H 
                            | H : TauF _ = observe ?t |- _ => apply simpobs in H
@@ -574,14 +727,17 @@ Proof.
     eapply paco2_mon; [apply Hk12; auto | intros; contradiction] .
   - rewrite Heqot1, Heqot2. repeat rewrite bind_tau. pstep. constructor.
     right. pclearbot. eapply CIH; eauto.
+  - rewrite Heqot1, bind_tau. pstep. constructor. 
+    pstep_reverse.
+  - rewrite Heqot2, bind_tau. pstep. constructor. pstep_reverse.
   - pclearbot. rewrite Heqot1, Heqot2. repeat rewrite bind_vis.
     pstep. constructor; auto. intros. right. eapply CIH; eauto. 
 
     apply H0 in H1. pclearbot. auto.
-  - rewrite Heqot1, Heqot2. repeat rewrite bind_vis. pstep. constructor.
+ (* - rewrite Heqot1, Heqot2. repeat rewrite bind_vis. pstep. constructor.
     right. eapply CIH; eauto. pclearbot. apply H.
   - rewrite Heqot1, Heqot2. repeat rewrite bind_vis. pstep. constructor.
-    right. eapply CIH; eauto. pclearbot. apply H.
+    right. eapply CIH; eauto. pclearbot. apply H. *)
   - rewrite Heqot2. rewrite bind_vis. pstep. constructor. intros.
     pstep_reverse.
   - rewrite Heqot1. rewrite bind_vis. pstep. econstructor. 
@@ -627,12 +783,15 @@ Proof.
     + pstep. constructor. right. eapply CIH; eauto.
     + pstep. constructor; auto.
   - setoid_rewrite bind_tau. pstep. constructor. right. eapply CIH'; eauto.
+  - rewrite bind_tau. pstep. constructor. pstep_reverse.
+  - rewrite bind_tau. pstep. constructor. pstep_reverse.
   - setoid_rewrite bind_vis. pstep. constructor; auto. right. eapply CIH'; eauto. 
     apply H0 in H1; pclearbot; eauto.
+  (*
   - repeat rewrite bind_vis. pstep. constructor. right. eapply CIH'; eauto.
     apply H.
   - repeat rewrite bind_vis. pstep. constructor. right. eapply CIH'; eauto.
-    apply H.
+    apply H. *)
   - rewrite bind_vis. pstep. constructor. intros. pstep_reverse.
   - rewrite bind_vis. pstep. econstructor. pstep_reverse.
   - rewrite bind_vis. pstep. econstructor. pstep_reverse.
@@ -656,12 +815,21 @@ Proof.
     + pstep. constructor. auto.
   - setoid_rewrite bind_tau. pstep. constructor. left. pclearbot.
     eapply refines_iter_bind_aux; eauto.
-  - setoid_rewrite bind_vis. pstep. constructor; auto. left. pclearbot.
+  - rewrite bind_tau. pstep. constructor. pstep_reverse.
+    eapply refines_iter_bind_aux; eauto.
+    apply Hk in Hr12. rewrite Heqok1 in Hr12.
+    apply refines_TauL_inv in Hr12. auto.
+  - rewrite bind_tau. pstep. constructor. pstep_reverse.
+    eapply refines_iter_bind_aux; eauto.
+    apply Hk in Hr12. rewrite Heqok2 in Hr12.
+    apply refines_TauR_inv in Hr12. auto.
+(*  - setoid_rewrite bind_vis. pstep. constructor; auto. left. pclearbot.
     eapply refines_iter_bind_aux; eauto. apply H0 in H1; pclearbot; eauto.
   - setoid_rewrite bind_vis. pstep. constructor; auto. left. pclearbot.
-    eapply refines_iter_bind_aux; eauto. apply H.
+    eapply refines_iter_bind_aux; eauto. apply H. *)
   - setoid_rewrite bind_vis. pstep. constructor; auto. left. pclearbot.
-    eapply refines_iter_bind_aux; eauto. apply H.
+    eapply refines_iter_bind_aux; eauto. 
+    eapply H0 in H1. pclearbot. auto.
   - rewrite bind_vis. pstep. constructor. intros. pstep_reverse.
     eapply refines_iter_bind_aux; eauto; subst. all : pstep; apply H; auto.
   - rewrite bind_vis. pstep. econstructor. Unshelve. all : auto. subst.
@@ -759,14 +927,20 @@ Section Refines5.
     RE A B e1 e2 ->
     (forall a b, REAns A B e1 e2 a b -> F R1 R2 RR (k1 a) (k2 b) ) ->
     refines5F F R1 R2 RR (VisF (Spec_vis e1) k1) (VisF (Spec_vis e2) k2)
-  | refines5F_Forall R1 R2 (RR : R1 -> R2 -> Prop) A
+(*  | refines5F_Forall R1 R2 (RR : R1 -> R2 -> Prop) A
                      (k1 : A -> itree_spec E1 R1) (k2 : A -> itree_spec E2 R2) :
     (forall a, F R1 R2 RR (k1 a) (k2 a) ) -> refines5F F _ _ RR 
                                               (VisF Spec_forall k1) (VisF Spec_forall k2)
   | refines5F_Exists R1 R2 (RR : R1 -> R2 -> Prop) A
                      (k1 : A -> itree_spec E1 R1) (k2 : A -> itree_spec E2 R2) :
     (forall a, F R1 R2 RR (k1 a) (k2 a) ) -> refines5F F _ _ RR 
-                                              (VisF Spec_exists k1) (VisF Spec_exists k2)
+                                              (VisF Spec_exists k1) (VisF Spec_exists k2) *)
+  | refines5F_TauL R1 R2 (RR : R1 -> R2 -> Prop) t1 ot2 : 
+    refines5F F R1 R2 RR (observe t1) ot2 ->
+    refines5F F R1 R2 RR (TauF t1) ot2
+  | refines5F_TauR R1 R2 (RR : R1 -> R2 -> Prop) ot1 t2 :
+    refines5F F R1 R2 RR ot1 (observe t2) ->
+    refines5F F R1 R2 RR ot1 (TauF t2)
   | refines5F_ForallL R1 R2 (RR : R1 -> R2 -> Prop) A
                       (k1 : A -> itree_spec E1 R1) ot (a : A) : 
     refines5F F R1 R2 RR (observe (k1 a)) ot ->
@@ -812,10 +986,8 @@ Proof.
   pcofix CIH. intros. pstep. red.
   punfold H0. red in H0.
   hinduction H0 before r; intros; pclearbot; eauto.
-  - constructor; auto. intros. eapply H0 in H1. pclearbot.
-    right. eapply CIH; eauto.
-  - constructor. right. eapply CIH; eauto. apply H.
-  - constructor. right. eapply CIH; eauto. apply H.
+  constructor; auto. intros. eapply H0 in H1. pclearbot.
+  right. eapply CIH; eauto.
 Qed.
 
 Lemma refines5_to_refines (E1 E2 : Type -> Type) (R1 R2 : Type) 
@@ -826,10 +998,8 @@ Proof.
   pcofix CIH. intros. pstep. red.
   punfold H0. red in H0.
   hinduction H0 before r; intros; pclearbot; eauto.
-  - constructor; auto. intros. eapply H0 in H1. pclearbot.
-    right. eapply CIH; eauto.
-  - constructor. right. eapply CIH; eauto. apply H.
-  - constructor. right. eapply CIH; eauto. apply H.
+  constructor; auto. intros. eapply H0 in H1. pclearbot.
+  right. eapply CIH; eauto.
 Qed.
 
 
@@ -870,6 +1040,8 @@ Context (Hbodies : forall A B (d1 : D1 A) (d2 : D2 B),
       hinduction Hphi before r; intros; eauto.
       - cbn. constructor; auto.
       - cbn. constructor. right. pclearbot. eapply CIH2; eauto.
+      - cbn. constructor. eauto.
+      - cbn. constructor. eauto.
       - inv H; inj_existT; subst.
         + cbn. constructor. right. eapply CIH2; eauto. 
           eapply refines_bind. eapply Hbodies; eauto.
@@ -877,13 +1049,14 @@ Context (Hbodies : forall A B (d1 : D1 A) (d2 : D2 B),
           pclearbot. auto.
         + cbn. constructor; auto. intros. right. eapply CIH2; eauto.
           eapply sum_relEAns_inr in H. eapply H0 in H. pclearbot. auto.
-      - cbn. constructor. right. eapply CIH2; pclearbot; eauto.
-      - cbn. constructor. right. eapply CIH2; pclearbot; eauto.
+     (* - cbn. constructor. right. eapply CIH2; pclearbot; eauto.
+      - cbn. constructor. right. eapply CIH2; pclearbot; eauto. *)
       - cbn. constructor. intros. eapply H0; eauto.
       - cbn. econstructor. eapply IHHphi; eauto.
       - cbn. econstructor. eapply IHHphi; eauto.
       - cbn. constructor. intros. eapply H0; eauto.
     Qed.
+
 Theorem refines_mrec : forall A B (init1 : D1 A) (init2 : D2 B),
     REInv A B init1 init2 -> refines RE REAns (REAnsInv A B init1 init2)
                                     (mrec_spec bodies1 init1) (mrec_spec bodies2 init2).
@@ -896,6 +1069,8 @@ Proof.
   hinduction Hd' before r; intros; pclearbot; eauto.
   - cbn. constructor; auto.
   - cbn. constructor. left. eapply refines_interp_mrec_aux; eauto.
+  - cbn. constructor. eauto.
+  - cbn. constructor. eauto.
   - inv H; inj_existT; subst; cbn.
     + constructor. left. eapply refines_interp_mrec_aux; eauto.
       eapply refines_bind; eauto. intros.
@@ -903,8 +1078,8 @@ Proof.
     + constructor; auto. intros. left. 
       eapply refines_interp_mrec_aux; eauto.
       eapply sum_relEAns_inr in H. eapply H0 in H. pclearbot. auto.
-  - cbn. constructor. left. eapply refines_interp_mrec_aux; eauto.
-  - cbn. constructor. left. eapply refines_interp_mrec_aux; eauto.
+  (* - cbn. constructor. left. eapply refines_interp_mrec_aux; eauto.
+  - cbn. constructor. left. eapply refines_interp_mrec_aux; eauto. *)
   - cbn. constructor. intros. eapply H0; eauto.
   - cbn. econstructor. eapply IHHd'; eauto.
   - cbn. econstructor. eapply IHHd'; eauto.
