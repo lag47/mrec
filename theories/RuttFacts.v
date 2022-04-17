@@ -141,8 +141,6 @@ Qed.
 Variant EvEq {E : Type -> Type} : forall (A B : Type), E A -> E B -> Prop :=
   | eveq (A : Type) (e : E A) : EvEq A A e e.
 
-
-
 Variant EvEqAns {E : Type -> Type} : forall A B, E A -> A -> E B -> B -> Prop :=
   | eveqans A (e : E A) (a : A) : EvEqAns A A e a e a.
 
