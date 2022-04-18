@@ -804,9 +804,8 @@ Proof.
            eapply IHREL; eauto. inv H3. pclearbot. pstep_reverse.
       * eapply IHHref; eauto. pstep_reverse. rewrite <- (tau_eutt phi1). pstep. auto.
 Qed.
-(* the shortcut didn't work out, but I realized how to solve the cases that I have left
 
- *)
+
 Lemma refines_eutt_padded_l E1 E2 R1 R2 RE REAns RR : 
   forall (t1 t2 : itree_spec E1 R1) (t3 : itree_spec E2 R2),
     padded t2 -> padded t3 -> t1 ≈ t2 ->
@@ -1034,6 +1033,20 @@ Print Assumptions refines_eutt_padded_r.
 (* happened again *)
 
 
+Definition padded_refines {E1 E2 R1 R2} RE REAns RR (phi1 : itree_spec E1 R1) (phi2 : itree_spec E2 R2) :=
+  refines RE REAns RR (pad phi1) (pad phi2).
+
+
+Global Instance padded_refines_proper_eutt {E1 E2 R1 R2} RE REAns RR : Proper (eutt eq ==> eutt eq ==> flip impl)  (@padded_refines E1 E2 R1 R2 RE REAns RR).
+Proof.
+  intros t1 t2 Ht12 t3 t4 Ht34 Href. red. red in Href.
+  eapply refines_eutt_padded_r; try apply pad_is_padded.
+  setoid_rewrite pad_eutt in Ht34.
+  symmetry. eauto.
+  eapply refines_eutt_padded_l; try apply pad_is_padded.
+  setoid_rewrite pad_eutt in Ht12.
+  symmetry. eauto. auto.
+Qed.
 
 Ltac use_simpobs := repeat match goal with
                            | H : RetF _ = observe ?t |- _ => apply simpobs in H 
@@ -1083,6 +1096,18 @@ Proof.
   - rewrite Heqot1. rewrite bind_vis. pstep. econstructor. 
     pstep_reverse.
 Qed.
+
+Theorem padded_refines_bind {E1 E2 R1 R2 S1 S2} RE REAns RR RS
+        (t1 : itree_spec E1 R1) (t2 : itree_spec E2 R2)
+        (k1 : R1 -> itree_spec E1 S1)
+        (k2 : R2 -> itree_spec E2 S2) :
+  padded_refines RE REAns RR t1 t2 -> (forall r1 r2, RR r1 r2 -> padded_refines RE REAns RS (k1 r1) (k2 r2)) ->
+  padded_refines RE REAns RS (ITree.bind t1 k1) (ITree.bind t2 k2).
+Proof.
+  unfold padded_refines.
+  setoid_rewrite pad_bind. intros. eapply refines_bind; eauto.
+Qed.
+
 
 (*key lemma for iter here *)
 Lemma refines_iter_bind_aux:
@@ -1138,7 +1163,7 @@ Qed.
 (*this one is going to be rougher going to require some nested coinduction, but should be manageable *)
 Theorem refines_iter {E1 E2 R1 R2 S1 S2} RE REAns (RR : R1 -> R2 -> Prop) (RS : S1 -> S2 -> Prop)
         (k1 : R1 -> itree_spec E1 (R1 + S1)) (k2 : R2 -> itree_spec E2 (R2 + S2)) :
-  (forall r1 r2, RR r1 r2 -> refines RE REAns (HeterogeneousRelations.sum_rel RR RS) (k1 r1) (k2 r2) ) ->
+  (forall r1 r2, RR r1 r2 -> refines RE REAns (sum_rel RR RS) (k1 r1) (k2 r2) ) ->
   forall r1 r2, RR r1 r2 ->  refines RE REAns RS (ITree.iter k1 r1) (ITree.iter k2 r2).
 Proof.
   intros Hk. pcofix CIH. intros r1 r2 Hr12.
@@ -1177,6 +1202,14 @@ Proof.
     eapply refines_iter_bind_aux; eauto. pstep. apply H.
 Qed.
 
+Theorem padded_refines_iter {E1 E2 R1 R2 S1 S2} RE REAns (RR : R1 -> R2 -> Prop) (RS : S1 -> S2 -> Prop)
+        (k1 : R1 -> itree_spec E1 (R1 + S1)) (k2 : R2 -> itree_spec E2 (R2 + S2)) :
+  (forall r1 r2, RR r1 r2 -> padded_refines RE REAns (sum_rel RR RS) (k1 r1) (k2 r2) ) ->
+  forall r1 r2, RR r1 r2 ->  padded_refines RE REAns RS (ITree.iter k1 r1) (ITree.iter k2 r2).
+Proof.
+  unfold padded_refines. setoid_rewrite pad_iter.
+  intros. eapply refines_iter; eauto.
+Qed.
 
 Definition and_spec {E R} (phi1 phi2 : itree_spec E R) : itree_spec E R :=
   Vis Spec_forall (fun b : bool => if b then phi1 else phi2).
@@ -1246,11 +1279,210 @@ Definition interp_mrec_spec {D E : Type -> Type}
            (ctx : D ~> itree_spec (D +' E)) {R} (t : itree_spec (D +' E) R) :=
   interp_mrec_spec' ctx (observe t).
 
+Lemma interp_mrec_spec'_forall:
+  forall (E : Type -> Type) (R : Type) (D : Type -> Type)
+    (ctx : forall T : Type, D T -> itree_spec (D +' E) T)
+    (u : Type) (k1 : u -> itree_spec (D +' E) R),
+    interp_mrec_spec' ctx (VisF Spec_forall k1)
+                      ≅ Vis Spec_forall
+                      (fun x : u => interp_mrec_spec' ctx (observe (k1 x))).
+Proof.
+  intros E R D ctx u k1.
+  pstep. red. cbn. constructor. left.
+  enough ((interp_mrec_spec' ctx (observe (k1 v))) ≅ (interp_mrec_spec' ctx (observe (k1 v)))); eauto.
+  reflexivity.
+Qed.
+
+Lemma interp_mrec_spec'_exists:
+  forall (E : Type -> Type) (R : Type) (D : Type -> Type)
+    (ctx : forall T : Type, D T -> itree_spec (D +' E) T)
+    (u : Type) (k1 : u -> itree_spec (D +' E) R),
+    interp_mrec_spec' ctx (VisF Spec_exists k1)
+                      ≅ Vis Spec_exists
+                      (fun x : u => interp_mrec_spec' ctx (observe (k1 x))).
+Proof.
+  intros E R D ctx u k1.
+  pstep. red. cbn. constructor. left.
+  enough ((interp_mrec_spec' ctx (observe (k1 v))) ≅ (interp_mrec_spec' ctx (observe (k1 v)))); eauto.
+  reflexivity.
+Qed.
+
+Lemma interp_mrec_spec'_inl:
+  forall (E : Type -> Type) (R : Type)
+    (D : Type -> Type)
+    (ctx : forall T : Type,
+        D T -> itree_spec (D +' E) T)
+    (u : Type) (d : D u)
+    (k1 : u -> itree_spec (D +' E) R),
+    interp_mrec_spec' ctx
+                      (VisF (Spec_vis (inl1 d)) k1)
+                      ≅ Tau
+                      (interp_mrec_spec' ctx
+                                         (observe (ctx u d >>= k1))).
+Proof.
+  intros E R D ctx u d k1. pstep. red. cbn. constructor.
+  left. assert ((interp_mrec_spec' ctx
+       (observe (ctx u d >>= k1))) ≅ (interp_mrec_spec' ctx
+       (observe (ctx u d >>= k1)))); auto. reflexivity.
+Qed.
+
+Lemma interp_mrec_spec'_inr:
+  forall (E : Type -> Type) (R : Type)
+    (D : Type -> Type)
+    (ctx : forall T : Type,
+        D T -> itree_spec (D +' E) T)
+    (u : Type) (e : E u)
+    (k1 : u -> itree_spec (D +' E) R),
+    interp_mrec_spec' ctx
+                      (VisF (Spec_vis (inr1 e)) k1)
+                      ≅ Vis (Spec_vis e)
+                      (fun x : u =>
+                         interp_mrec_spec' ctx
+                                           (observe (k1 x))).
+Proof.
+  intros E R D ctx u e k1.
+  pstep. red. cbn. constructor. left.
+  assert ((interp_mrec_spec' ctx (observe (k1 v))) ≅ (interp_mrec_spec' ctx (observe (k1 v)))); auto; reflexivity.
+Qed.
+
+Lemma interp_mrec_spec'_tau:
+  forall (E : Type -> Type) (R : Type) (D : Type -> Type)
+    (ctx : forall T : Type, D T -> itree_spec (D +' E) T)
+    (t : itree_spec (D +' E) R ),
+    interp_mrec_spec' ctx (TauF t)
+                      ≅ Tau (interp_mrec_spec' ctx (observe t)).
+Proof.
+  intros. pstep. red. cbn. constructor.
+  left. assert ((interp_mrec_spec' ctx (observe t)) ≅ (interp_mrec_spec' ctx (observe t))); auto; reflexivity.
+Qed.
+
+(*make a pull request to add this to library *)
+#[global] Instance geuttge_cong_euttger {E R1 R2 RR1 RR2 RS} r rg
+       (LERR1: forall x x' y, (RR1 x x': Prop) -> (RS x' y: Prop) -> RS x y)
+       (LERR2: forall x y y', (RR2 y y': Prop) -> RS x y' -> RS x y):
+  Proper (eq_itree RR1 ==> euttge RR2 ==> flip impl)
+         (gpaco2 (@eqit_ E R1 R2 RS false true id) (eqitC RS false true) r rg).
+Proof.
+  repeat intro. guclo eqit_clo_trans. eauto with itree.
+Qed.
+
+
+#[global] Instance geuttge_cong_euttger_eq {E R1 R2 RS} r rg:
+  Proper (eq_itree eq ==> euttge eq ==> flip impl)
+         (gpaco2 (@eqit_ E R1 R2 RS false true id) (eqitC RS false true) r rg).
+Proof.
+  eapply geuttge_cong_euttger; intros; subst; eauto. 
+Qed.
+
+Global Instance interp_mrec_spec_Proper b1 b2 {D E : Type -> Type} {R}  (ctx : D ~> itree_spec (D +' E)) :
+  Proper (eqit eq b1 b2 ==> eqit eq b1 b2) (@interp_mrec_spec D E ctx R).
+Proof.
+  ginit. gcofix CIH. intros.
+  unfold interp_mrec_spec. punfold H0. red in H0. 
+  hinduction H0 before r; intros; try inv CHECK; pclearbot; use_simpobs.
+  - gstep. red. cbn. constructor. auto.
+  - gstep. red. cbn. constructor. gfinal. left. eapply CIH; eauto.
+  - destruct e; try destruct s; cbn.
+    + setoid_rewrite interp_mrec_spec'_inl. gstep. constructor.
+      gfinal. left. eapply CIH; eauto.
+      eapply eqit_bind; eauto. assert (ctx _ d ≅ ctx _ d); auto; reflexivity.
+    + setoid_rewrite interp_mrec_spec'_inr. gstep. constructor.
+      gfinal. left. eapply CIH; eauto. apply REL.
+    + setoid_rewrite interp_mrec_spec'_forall. gstep. constructor. gfinal.
+      left. eapply CIH; eauto. apply REL.
+    + setoid_rewrite interp_mrec_spec'_exists. gstep. constructor. gfinal.
+      left. eapply CIH; eauto. apply REL.
+  - rewrite interp_mrec_spec'_tau.  destruct b2; setoid_rewrite tau_euttge; eauto.
+  - rewrite interp_mrec_spec'_tau. destruct b1; setoid_rewrite tau_euttge; eauto.
+Qed.
+
+
+
 Definition mrec_spec {D E : Type -> Type}
            (ctx : D ~> itree_spec (D +' E)) : D ~> itree_spec E :=
   fun R d => interp_mrec_spec ctx (ctx _ d).
 
 Arguments mrec_spec {D E} & ctx [T].
+
+Lemma padded_interp_mrec_spec_aux:
+      forall (E : Type -> Type) (R : Type) (D : Type -> Type) (bodies : forall T : Type, D T -> itree_spec (D +' E) T)
+        (r : itree_spec E R -> itree_spec E R -> Prop),
+        (forall d1 : D R, r (pad (mrec_spec bodies d1)) (mrec_spec (fun (R0 : Type) (d : D R0) => pad (bodies R0 d)) d1)) ->
+        forall t1 t2 : itree_spec (D +' E) R,
+          t1 ≈ t2 ->
+          gpaco2 (eqit_ eq true true id) (eqitC eq true true) r r (pad (interp_mrec_spec' bodies (observe t1)))
+                 (interp_mrec_spec' (fun (R0 : Type) (d : D R0) => pad (bodies R0 d)) (observe ( t2))).
+Proof.
+  intros E R D bodies r CIH. gcofix CIH. intros.
+  punfold H0. red in H0.
+  hinduction H0 before r; intros; use_simpobs.
+  - gstep. red. cbn. constructor; auto.
+  - setoid_rewrite interp_mrec_spec'_tau.
+    rewrite pad_tau. gstep. constructor.
+    gfinal. left. pclearbot. eapply CIH0; eauto.
+  - destruct e; try destruct s.
+    + gstep. red. cbn. constructor.
+      gfinal. left. eapply CIH0; eauto.
+      eapply eqit_bind; pclearbot; eauto. apply pad_eutt.
+    + gstep. red. cbn. constructor. intros. red. rewrite tau_euttge.
+      gfinal. left. eapply CIH0; pclearbot; apply REL.
+    + setoid_rewrite interp_mrec_spec'_forall. rewrite pad_vis.
+      setoid_rewrite tau_euttge. gstep. constructor.
+      intros. gfinal. left. eapply CIH0; pclearbot; apply REL.
+    + setoid_rewrite interp_mrec_spec'_exists. rewrite pad_vis.
+      setoid_rewrite tau_euttge. gstep. constructor.
+      intros. gfinal. left. eapply CIH0; pclearbot; apply REL.
+  - rewrite interp_mrec_spec'_tau, pad_tau, tau_euttge. eauto.
+  - rewrite interp_mrec_spec'_tau, tau_euttge. eauto.
+Qed.      
+      
+
+(*this might actually be a little stronger than is true, but eutt is all I need,
+  because events on the right might not correspond to events on the left
+ *)
+Theorem padded_mrec_spec D E R (bodies : D ~> itree_spec (D +' E)) :
+  forall (d1 : D R),
+  pad (mrec_spec bodies d1) ≈ mrec_spec (fun R d => pad (bodies _ d) ) d1.
+Proof.
+  ginit. gcofix CIH. intros. unfold mrec_spec.
+  destruct (observe (bodies R d1)) eqn : Heq; symmetry in Heq; use_simpobs.
+  - rewrite Heq. rewrite pad_ret. gstep. red. cbn. constructor. auto.
+  - setoid_rewrite Heq. rewrite pad_tau. setoid_rewrite interp_mrec_spec'_tau.
+    rewrite pad_tau. gstep. constructor. 
+    apply padded_interp_mrec_spec_aux; auto; apply pad_eutt.
+  - destruct e; try destruct s; setoid_rewrite Heq.
+    + rewrite pad_vis. setoid_rewrite interp_mrec_spec'_inl.
+      rewrite pad_tau. gstep. constructor.
+      assert ((interp_mrec_spec'
+       (fun (R0 : Type) (d0 : D R0) =>
+        pad (bodies R0 d0))
+       (observe
+          (pad (bodies X d) >>=
+           (fun a : X => Tau (pad (k a)))))) = interp_mrec_spec (fun (R0 : Type) (d0 : D R0) =>
+        pad (bodies R0 d0)) (pad (bodies _ d) >>= fun a => Tau (pad (k a))  ) ). auto.
+      setoid_rewrite H. setoid_rewrite tau_euttge.
+      apply padded_interp_mrec_spec_aux; auto.
+      eapply eqit_bind; repeat intro; try eapply pad_eutt.
+    + rewrite pad_vis. setoid_rewrite interp_mrec_spec'_inr.
+      rewrite pad_vis. setoid_rewrite interp_mrec_spec'_tau. gstep. constructor. 
+      intros. gstep. constructor.
+      eapply padded_interp_mrec_spec_aux; eauto; apply pad_eutt.
+    + rewrite pad_vis. setoid_rewrite interp_mrec_spec'_forall. setoid_rewrite pad_vis.
+      setoid_rewrite interp_mrec_spec'_tau. gstep. constructor. intros. gstep. constructor.
+      eapply padded_interp_mrec_spec_aux; eauto; apply pad_eutt.
+    + rewrite pad_vis. setoid_rewrite interp_mrec_spec'_exists. setoid_rewrite pad_vis.
+      setoid_rewrite interp_mrec_spec'_tau. gstep. constructor. intros. gstep. constructor.
+      eapply padded_interp_mrec_spec_aux; eauto; apply pad_eutt.
+Qed.
+
+(*looks like I need to generalize the lattice that padded works over to do
+  this proof *)
+Lemma padded_mrec_spec_pad:
+  forall D E (A : Type) (init : D A) (bodies : forall T : Type, D T -> itree_spec (D +' E) T),
+    padded (mrec_spec (fun (R : Type) (d : D R) => pad (bodies R d)) init).
+Proof.
+  unfold mrec_spec.
+Admitted.
 
 Section Refines5.
   Context {E1 E2 : Type -> Type}.
@@ -1425,3 +1657,35 @@ Qed.
 
 
 End MRecSpec.
+
+Section PaddedMRecSpec.
+
+Context (D1 D2 E1 E2 : Type -> Type).
+
+Context (bodies1 : D1 ~> itree_spec (D1 +' E1)) (bodies2 : D2 ~> itree_spec (D2 +' E2)).
+
+Context (RE : relationEH E1 E2) (REAns : relationEAns E1 E2).
+Context (REInv : relationEH D1 D2) (REAnsInv : relationEAns D1 D2).
+
+Context (Hbodies : forall A B (d1 : D1 A) (d2 : D2 B), 
+            REInv A B d1 d2 -> padded_refines (sum_relE REInv RE) 
+                                             (sum_relEAns REAnsInv REAns) 
+                                 (REAnsInv A B d1 d2) (bodies1 A d1) (bodies2 B d2) ).
+
+Theorem padded_refines_mrec : forall A B (init1 : D1 A) (init2 : D2 B),
+    REInv A B init1 init2 -> padded_refines RE REAns (REAnsInv A B init1 init2)
+                                    (mrec_spec bodies1 init1) (mrec_spec bodies2 init2).
+Proof.
+  unfold padded_refines in *.
+  intros. eapply refines_eutt_padded_l; try apply pad_is_padded.
+  symmetry. apply padded_mrec_spec.
+  eapply refines_eutt_padded_r; try apply pad_is_padded.
+  apply padded_mrec_spec_pad.
+  symmetry. apply padded_mrec_spec.
+  eapply refines_mrec; eauto.
+Qed.
+
+End PaddedMRecSpec.
+
+(*once you get the mrec proof, the next thing you do is fact this out*)
+c
