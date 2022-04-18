@@ -267,10 +267,22 @@ End Refines.
 (* need a little library of heterogeneous event relations to express theorems  *)
 
 (* Reflexivity of refinement *)
-Instance Reflexive_refines {E R} RE REAns RR : 
-  ReflexiveE RE -> ReflexiveEAns REAns -> Reflexive RR -> Reflexive (@refines E E R R RE REAns RR).
+Lemma refl_refines {E R} RE REAns RR : 
+  ReflexiveE RE -> ReflexiveEAns REAns -> Reflexive RR -> 
+  forall t, padded t -> (@refines E E R R RE REAns RR t t).
 Proof.
-Abort.
+  intros HRE HREAns HRR. pcofix CIH.
+  intros. pstep. red. punfold H0. red in H0.
+  inv H0; inj_existT; pclearbot; subst; try destruct e.
+  - constructor. reflexivity.
+  - constructor. right. eapply CIH; eauto.
+  - constructor. auto. left. pstep. constructor.
+    apply HREAns in H0. subst. right. eapply CIH; eauto. apply H1.
+  - apply refines_forallR. intros. apply refines_forallL with (a0 := a).
+    constructor. right. eapply CIH; eauto. apply H1.
+  - apply refines_existsL. intros. apply refines_existsR with (a0 := a).
+    constructor. right. eapply CIH; apply H1.
+Qed.
 (*  red. pcofix CIH. intros HRR HRE HREAns t. pfold. red.
   destruct (observe t); try destruct e; econstructor; eauto.
   intros. right. apply HRE in H. subst. eauto.
@@ -1475,13 +1487,47 @@ Proof.
       eapply padded_interp_mrec_spec_aux; eauto; apply pad_eutt.
 Qed.
 
+Variant padded2F {E} (F : forall R, itree E R -> Prop) : forall R, itree' E R -> Prop :=
+  | padded2F_Ret R r : padded2F F R (RetF r)
+  | padded2F_Tau R t : (F R t) -> padded2F F R (TauF t)
+  | padded2F_VisTau R A e k : (forall a : A, F R (k a)) -> padded2F F R (VisF e (fun x=> Tau (k x)) )
+.
+
+Definition padded2_ {E} F R (t : itree E R) : Prop :=
+  padded2F F R (observe t).
+
+Lemma padded2_monot E : monotone2 (@padded2_ E).
+Proof. unfold padded2_. repeat intro. induction IN; econstructor; eauto. Qed.
+
+Definition padded2 {E} := paco2 (@padded2_ E) bot2.
+
+#[local] Hint Resolve padded2_monot : paco.
+
+Lemma padded2_to_padded E R :
+  forall (t : itree E R), padded2 R t -> padded t.
+Proof.
+  pcofix CIH. intros. punfold H0. red in H0.
+  pstep. red. inv H0; inj_existT; subst; pclearbot.
+  - rewrite <- H2. constructor.
+  - rewrite <- H. constructor. right. eapply CIH; eauto.
+  - rewrite <- H. constructor. right. eapply CIH; eauto. apply H2.
+Qed.
+
 (*looks like I need to generalize the lattice that padded works over to do
-  this proof *)
+  this proof, I think I need a padded2 closure *)
 Lemma padded_mrec_spec_pad:
   forall D E (A : Type) (init : D A) (bodies : forall T : Type, D T -> itree_spec (D +' E) T),
     padded (mrec_spec (fun (R : Type) (d : D R) => pad (bodies R d)) init).
 Proof.
-  unfold mrec_spec.
+  intros. apply padded2_to_padded. generalize dependent A.
+  pcofix CIH. intros. unfold mrec_spec. unfold pad. pstep.
+  red.
+  destruct (observe (bodies A init)); cbn.
+  - constructor.
+  - constructor. left. admit.
+  - destruct e; try destruct s.
+    + cbn. constructor. admit.
+    + 
 Admitted.
 
 Section Refines5.
