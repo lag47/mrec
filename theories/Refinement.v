@@ -1688,4 +1688,4 @@ Qed.
 End PaddedMRecSpec.
 
 (*once you get the mrec proof, the next thing you do is fact this out*)
-c
+
