@@ -1084,9 +1084,9 @@ Proof.
     pstep_reverse.
   - rewrite Heqot2, bind_tau. pstep. constructor. pstep_reverse.
   - pclearbot. rewrite Heqot1, Heqot2. repeat rewrite bind_vis.
-    pstep. constructor; auto. intros. right. eapply CIH; eauto. 
-
-    apply H0 in H1. pclearbot. auto.
+    pstep. constructor; auto. intros. 
+    specialize (H0 a) as [b Hb]. exists b. intros He.
+    specialize (Hb He). pclearbot. right. eapply CIH; eauto.
  (* - rewrite Heqot1, Heqot2. repeat rewrite bind_vis. pstep. constructor.
     right. eapply CIH; eauto. pclearbot. apply H.
   - rewrite Heqot1, Heqot2. repeat rewrite bind_vis. pstep. constructor.
@@ -1150,8 +1150,9 @@ Proof.
   - setoid_rewrite bind_tau. pstep. constructor. right. eapply CIH'; eauto.
   - rewrite bind_tau. pstep. constructor. pstep_reverse.
   - rewrite bind_tau. pstep. constructor. pstep_reverse.
-  - setoid_rewrite bind_vis. pstep. constructor; auto. right. eapply CIH'; eauto. 
-    apply H0 in H1; pclearbot; eauto.
+  - setoid_rewrite bind_vis. pstep. constructor; auto. 
+    intros. specialize (H0 a) as [b Hb]. exists b. intros He. specialize (Hb He).
+    pclearbot. right. eapply CIH'; eauto.
   (*
   - repeat rewrite bind_vis. pstep. constructor. right. eapply CIH'; eauto.
     apply H.
@@ -1192,9 +1193,9 @@ Proof.
     eapply refines_iter_bind_aux; eauto. apply H0 in H1; pclearbot; eauto.
   - setoid_rewrite bind_vis. pstep. constructor; auto. left. pclearbot.
     eapply refines_iter_bind_aux; eauto. apply H. *)
-  - setoid_rewrite bind_vis. pstep. constructor; auto. left. pclearbot.
-    eapply refines_iter_bind_aux; eauto. 
-    eapply H0 in H1. pclearbot. auto.
+  - setoid_rewrite bind_vis. pstep. constructor; auto. 
+    intros a. specialize (H0 a) as [b Hb]. exists b. intros He.
+    specialize (Hb He). pclearbot. left. eapply refines_iter_bind_aux; eauto.
   - rewrite bind_vis. pstep. constructor. intros. pstep_reverse.
     eapply refines_iter_bind_aux; eauto; subst. all : pstep; apply H; auto.
   - rewrite bind_vis. pstep. econstructor. Unshelve. all : auto. subst.
@@ -1440,9 +1441,6 @@ Proof.
 Qed.      
       
 
-(*this might actually be a little stronger than is true, but eutt is all I need,
-  because events on the right might not correspond to events on the left
- *)
 Theorem padded_mrec_spec D E R (bodies : D ~> itree_spec (D +' E)) :
   forall (d1 : D R),
   pad (mrec_spec bodies d1) ≈ mrec_spec (fun R d => pad (bodies _ d) ) d1.
@@ -1660,7 +1658,7 @@ Section Refines5.
   | refine5F_Tau R1 R2 RR t1 t2 : F R1 R2 RR t1 t2 -> refines5F F _ _ RR (TauF t1) (TauF t2)
   | refines5F_SpecVis R1 R2 (RR : R1 -> R2 -> Prop) A B (e1 : E1 A) (e2 : E2 B) k1 k2 :
     RE A B e1 e2 ->
-    (forall a b, REAns A B e1 e2 a b -> F R1 R2 RR (k1 a) (k2 b) ) ->
+    (forall a, exists b, REAns A B e1 e2 a b -> F R1 R2 RR (k1 a) (k2 b) ) ->
     refines5F F R1 R2 RR (VisF (Spec_vis e1) k1) (VisF (Spec_vis e2) k2)
 (*  | refines5F_Forall R1 R2 (RR : R1 -> R2 -> Prop) A
                      (k1 : A -> itree_spec E1 R1) (k2 : A -> itree_spec E2 R2) :
@@ -1703,6 +1701,8 @@ Section Refines5.
   Proof.
     unfold refines5_. red. intros. 
     induction IN; eauto.
+    constructor; auto. intros. specialize (H0 a) as [b Hb].
+    exists b. intros He. specialize (Hb He). auto.
   Qed.
 
   Definition refines5 := paco5 refines5_ bot5.
@@ -1721,8 +1721,9 @@ Proof.
   pcofix CIH. intros. pstep. red.
   punfold H0. red in H0.
   hinduction H0 before r; intros; pclearbot; eauto.
-  constructor; auto. intros. eapply H0 in H1. pclearbot.
-  right. eapply CIH; eauto.
+  constructor; auto. intros. 
+  specialize (H0 a) as [b Hb]. exists b.
+  intros He. specialize (Hb He). pclearbot. right. eapply CIH; eauto.
 Qed.
 
 Lemma refines5_to_refines (E1 E2 : Type -> Type) (R1 R2 : Type) 
@@ -1733,8 +1734,8 @@ Proof.
   pcofix CIH. intros. pstep. red.
   punfold H0. red in H0.
   hinduction H0 before r; intros; pclearbot; eauto.
-  constructor; auto. intros. eapply H0 in H1. pclearbot.
-  right. eapply CIH; eauto.
+  constructor; auto. intros. specialize (H0 a) as [b Hb]. exists b.
+  intros He. specialize (Hb He). pclearbot. right. eapply CIH; eauto.
 Qed.
 
 
@@ -1780,17 +1781,30 @@ Context (Hbodies : forall A B (d1 : D1 A) (d2 : D2 B),
       - inv H; inj_existT; subst.
         + cbn. constructor. right. eapply CIH2; eauto. 
           eapply refines_bind. eapply Hbodies; eauto.
-          intros. eapply sum_relEAns_inl in H. eapply H0 in H.
-          pclearbot. auto.
-        + cbn. constructor; auto. intros. right. eapply CIH2; eauto.
-          eapply sum_relEAns_inr in H. eapply H0 in H. pclearbot. auto.
+          intros r1 r2 He. specialize (H0 r1) as [b Hb].
+          (*problem is that I need information about kphi2 r2 but H0 tells me about some other 
+            b and that is a problem  *)
+          (* if this works it will require a rewriting of the left case
+             of the sum_relEAns *)
+          admit.
+          (*ok I'm not sure this really works anymore, luckily we have the other definition*) (*
+          specialize (H0 r1) as [b Hb].
+          eapply sum_relEAns_inl in H. 
+          specialize (H0 r1) as [b Hb].
+          (*maybe sum_relEAns needs to change*)
+          eapply Hb in H.
+          pclearbot. auto. *)
+        + cbn. constructor; auto. intros a. specialize (H0 a) as [b Hb].
+          exists b.
+          right. eapply CIH2; eauto.
+          eapply sum_relEAns_inr in H. eapply Hb in H. pclearbot. auto.
      (* - cbn. constructor. right. eapply CIH2; pclearbot; eauto.
       - cbn. constructor. right. eapply CIH2; pclearbot; eauto. *)
       - cbn. constructor. intros. eapply H0; eauto.
       - cbn. econstructor. eapply IHHphi; eauto.
       - cbn. econstructor. eapply IHHphi; eauto.
       - cbn. constructor. intros. eapply H0; eauto.
-    Qed.
+    Admitted.
 
 Theorem refines_mrec : forall A B (init1 : D1 A) (init2 : D2 B),
     REInv A B init1 init2 -> refines RE REAns (REAnsInv A B init1 init2)
@@ -1809,17 +1823,21 @@ Proof.
   - inv H; inj_existT; subst; cbn.
     + constructor. left. eapply refines_interp_mrec_aux; eauto.
       eapply refines_bind; eauto. intros.
-      eapply sum_relEAns_inl in H. eapply H0 in H. pclearbot. auto.
-    + constructor; auto. intros. left. 
+      eapply sum_relEAns_inl in H. 
+      admit. (*
+      eapply H0 in H. pclearbot. auto.*)
+    + constructor; auto. intros. 
+      specialize (H0 a) as [b Hb]. exists b.
+      left. 
       eapply refines_interp_mrec_aux; eauto.
-      eapply sum_relEAns_inr in H. eapply H0 in H. pclearbot. auto.
+      eapply sum_relEAns_inr in H. eapply Hb in H. pclearbot. auto.
   (* - cbn. constructor. left. eapply refines_interp_mrec_aux; eauto.
   - cbn. constructor. left. eapply refines_interp_mrec_aux; eauto. *)
   - cbn. constructor. intros. eapply H0; eauto.
   - cbn. econstructor. eapply IHHd'; eauto.
   - cbn. econstructor. eapply IHHd'; eauto.
   - cbn. constructor. intros; eapply H0; eauto.
-Qed.
+Admitted.
 
 
 End MRecSpec.
