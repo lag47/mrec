@@ -273,7 +273,10 @@ Proof.
   eapply eqit_mon; try apply Ht34; eauto.
 Qed.
 
-      
+(*turn rutt6 to rutt5*)
+(*come up with a transitivity closure for rutt5*)
+(* prove euttge and eq_itree rewrite rules*)
+(*come up with a bind closure for rutt5*)      
 
 Section MRec.
 

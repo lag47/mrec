@@ -41,7 +41,7 @@ Definition relationEAns (E1 E2 : Type -> Type) : Type := forall A B, E1 A -> E2 
 
 Variant sum_relEAns {E1 E2 F1 F2} (REE : relationEAns E1 E2) (REF : relationEAns F1 F2) : 
   forall A B, (E1 +' F1) A -> (E2 +' F2) B -> A -> B -> Prop :=
-| sum_relEAns_inl A B (e1 : E1 A) (e2 : E2 B) a b : REE A B e1 e2 a b -> sum_relEAns REE REF A B (inl1 e1) (inl1 e2) a b
+| sum_relEAns_inl A B (e1 : E1 A) (e2 : E2 B) a : forall b, REE A B e1 e2 a b -> sum_relEAns REE REF A B (inl1 e1) (inl1 e2) a b
 | sum_relEAns_inr A B (f1 : F1 A) (f2 : F2 B) a b : REF A B f1 f2 a b -> sum_relEAns REE REF A B (inr1 f1) (inr1 f2) a b
 .
 
@@ -72,8 +72,8 @@ Variant rcomposeEAns {E1 E2 E3 : Type -> Type}
   | rcomposeEAns_intro (A C : Type) 
                        (e1 : E1 A) (e3 : E3 C)
                        a c :
-    (forall B (e2 : E2 B), 
-      RE A B C e1 e2 e3 -> exists b, RE12 A B e1 e2 a b /\ RE23 B C e2 e3 b c) ->
+    (forall B (e2 : E2 B) (b : B), 
+      RE A B C e1 e2 e3 -> RE12 A B e1 e2 a b /\ RE23 B C e2 e3 b c) ->
     rcomposeEAns RE12 RE23 RE A C e1 e3 a c.
 
 (*this is stronger than I need*)

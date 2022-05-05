@@ -43,7 +43,7 @@ Lemma padded_Vis_inv E R A (e : E A) (k : A -> itree E R) :
 Proof.
   intro Hek. pinversion Hek. inj_existT. subst. exists k1. reflexivity.
 Qed.
-
+ 
 CoFixpoint pad_ {E R} (ot : itree' E R) : itree E R :=
   match ot with
   | RetF r => Ret r
