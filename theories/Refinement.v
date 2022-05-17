@@ -948,7 +948,7 @@ Qed.
 
 (* so whats next, *)
 (* Transitivity of refinement if the LHS is concrete *)
-Theorem concreteRefinesTrans {E1 E2 E3 R1 R2 R3} RE1 RE2 REAns1 REAns2 
+Theorem refinesTrans {E1 E2 E3 R1 R2 R3} RE1 RE2 REAns1 REAns2 
         (RR1 : R1 -> R2 -> Prop) (RR2 : R2 -> R3 -> Prop) 
         (t1 : itree_spec E1 R1) (t2 : itree_spec E2 R2) (t3 : itree_spec E3 R3):
   padded t1 -> padded t2 -> padded t3 ->

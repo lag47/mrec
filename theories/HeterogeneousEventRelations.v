@@ -87,3 +87,9 @@ Class SymmetricEAns {E : Type -> Type} (REA : relationEAns E E) : Prop :=
   symmetricEAns : forall A B (e1 : E A) (e2 : E B) a b,
       REA A B e1 e2 a b -> REA B A e2 e1 b a.
 
+
+Variant eqE {E} : forall A B : Type, E A -> E B -> Prop :=
+  | eqE_eq A (e : E A) : eqE A A e e.
+
+Variant eqEAns {E} : forall A B : Type, E A -> E B -> A -> B -> Prop :=
+  | eqEAns_eq A e a : eqEAns A A e e a a. 
