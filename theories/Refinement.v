@@ -1158,6 +1158,20 @@ Proof.
   - constructor. intros. eapply H0; eauto with solve_padded.
 Qed.
 
+Lemma refines_monot E1 E2 R1 R2 RE1 RE2 REAns1 REAns2 RR1 RR2 : 
+  (forall A B, RE1 A B <2= RE2 A B) ->
+  (forall A B (ea : E1 A) (eb : E2 B), REAns2 A B ea eb <2= REAns1 A B ea eb) ->
+  RR1 <2= RR2 ->
+  forall (phi1 : itree_spec E1 R1) (phi2 : itree_spec E2 R2),
+    refines RE1 REAns1 RR1 phi1 phi2 ->
+    refines RE2 REAns2 RR2 phi1 phi2.
+Proof. 
+  intros HRe HReAns HRR. pcofix CIH. intros phi1 phi2 Hphi.
+  pstep. red. punfold Hphi. red in Hphi. hinduction Hphi before r; intros; pclearbot; eauto.
+  constructor; auto. intros a b Heab. 
+  apply HReAns in Heab. apply H0 in Heab. pclearbot.
+  right. auto.
+Qed.
 
 
 
