@@ -1,11 +1,9 @@
 
 
-Locate "<=?".
-
 Require Import Coq.Lists.List Coq.Sorting.Permutation.
 
 From Coq Require Export Morphisms RelationClasses Setoid Program.Equality.
-From ITree Require Export ITree ITreeFacts Eq.Rutt.
+From ITree Require Export ITree ITreeFacts Eq.Rutt Props.Divergence Props.Finite.
 From Paco Require Import paco.
 From Coq Require Export Eqdep EqdepFacts.
 Require Import Lia.
@@ -431,11 +429,7 @@ Proof.
   - intros a b l Hl.
     unfold halve, halve_spec, rec_fix_spec, rec_spec, mrec_spec. cbn.
     rewrite interp_mrec_spec_bind.
-    setoid_rewrite interp_mrec_spec_trigger. cbn.
-    match goal with |- padded_refines_eq eq (ITree.bind ?h _) _ => set h as t end.
-    assert (t = halve l).
-    { unfold halve, rec_fix_spec, rec_spec, t. reflexivity. }
-    rewrite H. rewrite Hl. 
+    setoid_rewrite interp_mrec_spec_trigger. cbn. setoid_rewrite Hl.
     cbn. rewrite bind_bind.
     existssl. intros l1. setoid_rewrite bind_bind. existssl. intros l2.
     rewrite bind_bind. assertsl. intros Hperm. rewrite bind_bind.
@@ -594,9 +588,6 @@ Ltac normalize_interp_mrec_spec :=
 (*may also need that the results of halve give smaller lists*)
 Theorem sort_correct E l : padded_refines_eq eq (sort l) (@sort_spec E l).
 Proof.
-  (*seems like some kind of strong induction is more useful here
-    https://softwarefoundations.cis.upenn.edu/vfa-current/Merge.html#mergesort_ind
-   *)
   revert l.
   apply strong_list_ind.
   - cbn. existssr (@nil nat). assertsr. reflexivity.
@@ -607,7 +598,7 @@ Proof.
       unfold sort, rec_fix, rec, mrec. cbn.
       setoid_rewrite interp_mrec_spec_ret. reflexivity. }
     remember (n :: n0 :: l) as ln. assert (Nat.leb (length ln) 1 = false).
-    { subst. reflexivity. }
+    { subst. reflexivity. } 
     cbn. unfold sort, rec_fix_spec, rec_spec, mrec_spec. cbn.
     rewrite H. rewrite interp_mrec_spec_bind. rewrite halve_rewrite.
     cbn.
@@ -617,28 +608,11 @@ Proof.
     assertsl. intros Hlens. setoid_rewrite interp_mrec_spec_ret.
     rewrite bind_ret_l. cbn. setoid_rewrite interp_mrec_spec_bind.
     assert (Hl1 : @padded_refines_eq E _ _ eq (sort l1) (sort_spec l1) ).
-    { apply Hsind. subst. clear H. destruct Hlens.
-      destruct H0; cbn in *; lia. }
+    { apply Hsind. subst. clear H. destruct Hlens. cbn in *. lia. }
     assert (Hl2 : @padded_refines_eq E _ _ eq (sort l2) (sort_spec l2)).
-    { apply Hsind. subst. cbn in *. destruct Hlens.
-      destruct H1; lia. }
-    assert ((interp_mrec_spec
-          (calling'
-             (fun l0 : list nat =>
-              if Nat.leb (length l0) 1
-              then Ret l0
-              else
-               ITree.bind (halve l0)
-                 (fun x : list nat * list nat =>
-                  let (l3, l4) := x in
-                  ITree.bind (call_spec l3)
-                    (fun l5 : list nat =>
-                     ITree.bind (call_spec l4) (fun l6 : list nat => merge (l5, l6))))))
-          (call_spec l1)) ≈ @sort E l1).
-    { unfold sort, rec_fix_spec, rec_spec, mrec_spec. cbn.
-      setoid_rewrite interp_mrec_spec_trigger. reflexivity. }
-    rewrite H0. clear H0.
-    rewrite Hl1. cbn. rewrite bind_bind. existssl. intros l1s.
+    { apply Hsind. subst. cbn in *. destruct Hlens. lia. }
+    setoid_rewrite interp_mrec_spec_trigger. rewrite Hl1.
+    cbn. rewrite bind_bind. existssl. intros l1s.
     rewrite bind_bind.
     assertsl. intros Hl1p. rewrite bind_bind. assertsl. intros Hl1s_sorted.
     rewrite bind_ret_l. setoid_rewrite interp_mrec_spec_bind.
@@ -655,6 +629,66 @@ Proof.
     setoid_rewrite Hl1p. setoid_rewrite Hl2p. reflexivity.
     assertsr. auto. reflexivity.
 Qed.
+
+(*what about relating these specs to 
+  rec_fix (fun rec () => 
+          or_spec (rec ()) (exists x, ret x)
+  )
+
+
+*)
+(* if we have t1 >>= t2 where all of the events in t1 >>= t2 are foralls,
+   shouldn't that be the same thing as and, does that help?*)
+(*
+Lemma halve_correct'' E l : padded_refines_eq eq (@halve_spec_fix E l) 
+                                              (or_spec (halve_spec l) ITree.spin).
+Proof.
+  unfold halve_spec_fix, rec_fix_spec, rec_spec, mrec_spec.
+  match goal with | |- padded_refines_eq eq (interp_mrec_spec ?k _ ) _ => set k as ctx end.
+  simpl. rewrite <- bind_bind.
+  setoid_rewrite interp_mrec_spec_bind.
+  assert (Hhalve : forall l, interp_mrec_spec ctx (halve_spec l) ≈ halve_spec l ).
+  { clear l. intros l. cbn. repeat rewrite bind_bind. repeat normalize_interp_mrec_spec. 
+    apply eqit_bind. reflexivity. intros l'.
+    repeat normalize_interp_mrec_spec.
+    apply eqit_bind. reflexivity. intros l''.
+    repeat normalize_interp_mrec_spec. setoid_rewrite interp_mrec_spec_ret. 
+    reflexivity. } 
+  setoid_rewrite Hhalve.
+  (* now I can show the tree on the left refines either some exists x, ret x 
+     or spin?
+     or maybe I just need to show it hasa bunch of vis forall / exists with no bottoms?
+     something to say the only bad thing that tree can do is diverge
+
+   *)
+  (*might be easier to  show that any concrete tree that refines halve_spec_fix *)
+  match goal with |- padded_refines_eq eq (?t0 >> _) _ =>
+                    set t0 as t end.
+  assert (Ht : padded_refines_eq eq t (or_spec (Ret tt) ITree.spin )).
+  {
+
+    clear l.
+    unfold t. clear t.
+    setoid_rewrite interp_mrec_spec_bind. rewrite interp_mrec_spec_exists.
+    existssl. intros n. induction n.
+    - cbn. rewrite interp_mrec_spec_ret. apply or_spec_r. left. reflexivity.
+    - cbn. setoid_rewrite interp_mrec_spec_bind.
+      setoid_rewrite IHn. rewrite interp_mrec_spec_bind, interp_mrec_spec_exists.
+      rewrite bind_bind.
+      existssl. intros l.
+      (* here need some coinductive? hypothesis telling what is coiling on with 
+         halve_spec_fix l
+       *)
+    unfold ctx.  
+    (*could use lem here *) admit. 
+    (*how sure am i that this refinement holds? *)
+  }
+  rewrite Ht. rewrite or_spec_bind. clear Ht. apply or_spec_l. 
+  - rewrite bind_ret_l. apply or_spec_r. left. reflexivity.
+  - apply or_spec_r. right. setoid_rewrite spin_bind. reflexivity.
+Admitted.
+  
+*)
 (*
 Lemma merge_correct1 E l1 l2 : padded_refines_eq eq (merge (l1,l2) ) (@merge_spec1 E l1 l2).
 Proof.

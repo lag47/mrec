@@ -1183,6 +1183,16 @@ Print Assumptions refines_eutt_padded_r.
 Definition padded_refines {E1 E2 R1 R2} RE REAns RR (phi1 : itree_spec E1 R1) (phi2 : itree_spec E2 R2) :=
   refines RE REAns RR (pad phi1) (pad phi2).
 
+Lemma padded_refines_monot E1 E2 R1 R2 RE1 RE2 REAns1 REAns2 RR1 RR2 : 
+  (forall A B, RE1 A B <2= RE2 A B) ->
+  (forall A B (ea : E1 A) (eb : E2 B), REAns2 A B ea eb <2= REAns1 A B ea eb) ->
+  RR1 <2= RR2 ->
+  forall (phi1 : itree_spec E1 R1) (phi2 : itree_spec E2 R2),
+    padded_refines RE1 REAns1 RR1 phi1 phi2 ->
+    padded_refines RE2 REAns2 RR2 phi1 phi2.
+Proof. 
+  intros. eapply refines_monot; eauto.
+Qed.
 
 Global Instance padded_refines_proper_eutt {E1 E2 R1 R2} RE REAns RR : Proper (eutt eq ==> eutt eq ==> flip impl)  (@padded_refines E1 E2 R1 R2 RE REAns RR).
 Proof.
@@ -1924,4 +1934,16 @@ Qed.
 
 End PaddedMRecSpec.
 
+Lemma refines_spin E1 E2 R1 R2 RE REAns RR :
+  @refines E1 E2 R1 R2 RE REAns RR ITree.spin ITree.spin.
+Proof.
+  pcofix CIH.
+  pstep. red. cbn. constructor. eauto.
+Qed.
 
+Lemma padded_refines_spin E1 E2 R1 R2 RE REAns RR :
+  @padded_refines E1 E2 R1 R2 RE REAns RR ITree.spin ITree.spin.
+Proof.
+  pcofix CIH.
+  pstep. red. cbn. constructor. eauto.
+Qed.

@@ -93,3 +93,12 @@ Variant eqE {E} : forall A B : Type, E A -> E B -> Prop :=
 
 Variant eqEAns {E} : forall A B : Type, E A -> E B -> A -> B -> Prop :=
   | eqEAns_eq A e a : eqEAns A A e e a a. 
+
+Variant sub_eqE {E} (P : forall A, E A -> Prop) : forall A B : Type, E A -> E B -> Prop :=
+  | sub_eqE_eq A (e : E A) : P A e -> sub_eqE P A A e e.
+
+Variant sub_eqEAns {E} (P : forall A, E A -> A -> Prop) : forall A B : Type, E A -> E B -> A -> B -> Prop :=
+  | sub_eqEAns_eq A e a : P A e a -> sub_eqEAns P A A e e a a.
+
+Variant sub_eq {A: Type} (P : A -> Prop) : A -> A -> Prop :=
+  | sub_eq_intro a : P a -> sub_eq P a a.
