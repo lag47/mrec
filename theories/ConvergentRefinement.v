@@ -143,6 +143,12 @@ Proof.
   - constructor; auto. right. pclearbot. eapply CIH; apply H0.
 Qed.
 
+Lemma conv_ref_ret E R (r : R) : 
+  @conv_ref E R (Ret r).
+Proof.
+  pstep. red. constructor.
+Qed.
+
 Variant conv_ref_mrecF {E D : Type -> Type} {R : Type} (P : forall A, D A -> Prop) 
         (F : itree_spec (D +' E) R -> Prop) : 
   itree_spec' (D +' E) R -> Prop :=
