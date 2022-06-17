@@ -293,7 +293,7 @@ Section SpecFix.
      from there I should be able to prove that total_spec_fix
    *)
 
-  Lemma total_spec_fix_ret a : padded_refines_eq eq (total_spec_fix a) (total_spec a).
+  Lemma total_spec_fix_total a : padded_refines_eq eq (total_spec_fix a) (total_spec a).
   Proof.
     revert a.
     apply well_founded_ind with (R := Rdec). auto.
